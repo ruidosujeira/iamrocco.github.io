@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Rocco</title>
+    <style>
+      body {
+        background: #0a0a0a;
+        color: #00ff88;
+        font-family: monospace;
+        text-align: center;
+        padding-top: 120px;
+      }
+      .scanline {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.25) 0px,
+          rgba(0, 0, 0, 0.25) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+        mix-blend-mode: overlay;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>> iamrocco.me</h1>
+    <p>identity initialized_</p>
+    <div class="scanline"></div>
+  </body>
+</html>
