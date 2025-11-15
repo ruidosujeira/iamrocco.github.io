@@ -18,7 +18,6 @@
         --green-soft: #7af7c8;
         --green-dark: #008851;
         --accent: #9d4dff;
-        --danger: #ff3860;
       }
 
       * {
@@ -33,12 +32,58 @@
       }
 
       body {
-        background: radial-gradient(circle at top, #151a2a 0, var(--bg) 55%);
-        color: var(--green-soft);
         font-family: "VT323", monospace;
         font-size: 18px;
-        text-shadow: 0 0 4px rgba(0, 255, 136, 0.5);
         overflow-x: hidden;
+      }
+
+      /* THEMES */
+
+      body.theme-crt {
+        background: radial-gradient(circle at top, #151a2a 0, var(--bg) 55%);
+        color: var(--green-soft);
+        text-shadow: 0 0 4px rgba(0, 255, 136, 0.5);
+      }
+
+      body.theme-neon {
+        background: radial-gradient(circle at top, #1a1030 0, #05030a 55%);
+        color: #f0e6ff;
+        text-shadow: 0 0 6px rgba(189, 140, 255, 0.8);
+      }
+
+      body.theme-neon .frame {
+        border-color: rgba(157, 77, 255, 0.6);
+        box-shadow:
+          0 0 20px rgba(0, 0, 0, 0.9),
+          0 0 28px rgba(157, 77, 255, 0.3);
+        background: linear-gradient(
+          135deg,
+          rgba(2, 0, 20, 0.95),
+          rgba(10, 0, 40, 0.98)
+        );
+      }
+
+      body.theme-neon .section-title {
+        color: #ffb3ff;
+      }
+
+      body.theme-neon .project-card {
+        border-color: rgba(157, 77, 255, 0.5);
+        background: rgba(3, 0, 18, 0.8);
+      }
+
+      body.theme-neon .project-card:hover {
+        border-color: #ffb3ff;
+        box-shadow: 0 0 12px rgba(157, 77, 255, 0.5);
+      }
+
+      body.theme-neon .pill {
+        border-color: rgba(214, 137, 255, 0.7);
+        background: rgba(10, 0, 40, 0.8);
+      }
+
+      body.theme-neon .status-line {
+        color: rgba(230, 206, 255, 0.8);
       }
 
       a {
@@ -49,7 +94,7 @@
       .crt {
         position: relative;
         min-height: 100vh;
-        padding: 32px 12px 48px;
+        padding: 24px 24px 40px;
         display: flex;
         justify-content: center;
       }
@@ -66,7 +111,7 @@
           transparent 1px,
           transparent 3px
         );
-        opacity: 0.28;
+        opacity: 0.26;
         mix-blend-mode: soft-light;
         z-index: 20;
       }
@@ -89,7 +134,7 @@
       .frame {
         position: relative;
         width: 100%;
-        max-width: 980px;
+        max-width: 1200px; /* mais largo, ocupa bem a tela */
         border: 1px solid rgba(0, 255, 136, 0.4);
         background: linear-gradient(
           135deg,
@@ -136,7 +181,6 @@
 
       .title-bar {
         font-size: 16px;
-        color: var(--green-soft);
         opacity: 0.8;
       }
 
@@ -145,7 +189,7 @@
         padding-top: 12px;
       }
 
-      /* NAVBAR */
+      /* NAVBAR SIMPLIFICADA */
 
       .nav {
         display: flex;
@@ -153,35 +197,48 @@
         gap: 12px;
         margin-bottom: 20px;
         font-size: 16px;
+        align-items: center;
       }
 
-      .nav span {
-        color: var(--green-soft);
+      .nav-prefix {
         opacity: 0.7;
       }
 
-      .nav a {
-        padding: 2px 8px;
+      .nav-label {
+        padding: 2px 10px;
         border-radius: 3px;
-        border: 1px solid transparent;
+        border: 1px solid rgba(0, 255, 136, 0.5);
+        background: rgba(0, 0, 0, 0.6);
+        font-size: 15px;
+      }
+
+      body.theme-neon .nav-label {
+        border-color: rgba(157, 77, 255, 0.75);
+        box-shadow: 0 0 10px rgba(157, 77, 255, 0.25);
+      }
+
+      .mode-toggle {
+        margin-left: auto;
+        font-size: 14px;
+        padding: 2px 10px;
+        border-radius: 3px;
+        border: 1px solid rgba(0, 255, 136, 0.5);
+        background: rgba(0, 0, 0, 0.6);
+        cursor: pointer;
         transition:
-          border-color 90ms ease-out,
           background 90ms ease-out,
-          color 90ms ease-out,
-          transform 90ms ease-out;
+          transform 90ms ease-out,
+          box-shadow 90ms ease-out;
       }
 
-      .nav a:hover {
-        border-color: var(--green-dark);
-        background: rgba(0, 255, 136, 0.06);
-        color: var(--green);
+      .mode-toggle:hover {
         transform: translateY(-1px);
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
       }
 
-      .nav a.active {
-        border-color: var(--green);
-        background: rgba(0, 255, 136, 0.09);
-        color: var(--green);
+      body.theme-neon .mode-toggle {
+        border-color: rgba(157, 77, 255, 0.75);
+        box-shadow: 0 0 10px rgba(157, 77, 255, 0.25);
       }
 
       /* LAYOUT */
@@ -192,7 +249,7 @@
         gap: 32px;
       }
 
-      @media (min-width: 880px) {
+      @media (min-width: 950px) {
         .grid {
           grid-template-columns: minmax(0, 3.5fr) minmax(0, 2.5fr);
         }
@@ -215,22 +272,34 @@
         text-transform: uppercase;
       }
 
+      body.theme-neon h1 {
+        color: #ffb3ff;
+      }
+
       .hero-sub {
         font-size: 16px;
-        color: var(--green-soft);
         margin-bottom: 10px;
       }
 
       .hero-tagline {
         font-size: 15px;
-        color: rgba(192, 255, 227, 0.9);
         margin-bottom: 18px;
         max-width: 38rem;
       }
 
       .hero-meta {
-        font-size: 14px;
-        color: rgba(140, 255, 204, 0.7);
+        font-size: 15px;
+        margin-bottom: 6px;
+      }
+
+      .hero-meta,
+      .hero-tagline {
+        color: rgba(192, 255, 227, 0.9);
+      }
+
+      body.theme-neon .hero-meta,
+      body.theme-neon .hero-tagline {
+        color: rgba(240, 220, 255, 0.9);
       }
 
       .pill-row {
@@ -258,10 +327,18 @@
         color: rgba(140, 255, 204, 0.8);
       }
 
+      body.theme-neon .section-title span {
+        color: rgba(230, 206, 255, 0.9);
+      }
+
       .section-caption {
         font-size: 14px;
         color: rgba(166, 255, 220, 0.8);
         margin-bottom: 10px;
+      }
+
+      body.theme-neon .section-caption {
+        color: rgba(225, 206, 255, 0.9);
       }
 
       p {
@@ -271,6 +348,10 @@
 
       .muted {
         color: rgba(140, 255, 204, 0.7);
+      }
+
+      body.theme-neon .muted {
+        color: rgba(220, 206, 255, 0.8);
       }
 
       .project-list {
@@ -314,14 +395,26 @@
         color: var(--green);
       }
 
+      body.theme-neon .project-name {
+        color: #ffb3ff;
+      }
+
       .project-tag {
         font-size: 12px;
         color: rgba(140, 255, 204, 0.8);
       }
 
+      body.theme-neon .project-tag {
+        color: rgba(230, 206, 255, 0.9);
+      }
+
       .project-desc {
         font-size: 14px;
         color: rgba(188, 255, 231, 0.9);
+      }
+
+      body.theme-neon .project-desc {
+        color: rgba(238, 226, 255, 0.93);
       }
 
       .project-meta {
@@ -330,9 +423,12 @@
         color: rgba(144, 255, 210, 0.7);
       }
 
+      body.theme-neon .project-meta {
+        color: rgba(221, 206, 255, 0.84);
+      }
+
       .lab-note {
         font-size: 14px;
-        color: rgba(197, 255, 236, 0.9);
         margin-top: 4px;
       }
 
@@ -355,6 +451,10 @@
         color: var(--green);
       }
 
+      body.theme-neon .prompt {
+        color: #ffb3ff;
+      }
+
       .cursor {
         display: inline-block;
         width: 10px;
@@ -372,7 +472,6 @@
         }
       }
 
-      /* pequena micro-animação no load */
       .fade-in {
         opacity: 0;
         transform: translateY(4px);
@@ -393,16 +492,76 @@
       footer {
         margin-top: 10px;
         font-size: 12px;
-        color: rgba(144, 255, 210, 0.6);
         text-align: right;
       }
 
       footer span {
         color: var(--green);
       }
+
+      body.theme-neon footer span {
+        color: #ffb3ff;
+      }
+
+      /* BOOT SCREEN */
+
+      #boot-screen {
+        position: fixed;
+        inset: 0;
+        background: #020202;
+        color: #00ff88;
+        font-family: "VT323", monospace;
+        padding: 40px 24px;
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+
+      #boot-inner {
+        width: 100%;
+        max-width: 720px;
+        font-size: 18px;
+        white-space: pre-line;
+      }
+
+      #boot-title {
+        margin-bottom: 12px;
+      }
+
+      #boot-progress {
+        margin-top: 10px;
+        font-size: 14px;
+        color: rgba(140, 255, 204, 0.9);
+      }
+
+      #boot-bar {
+        margin-top: 4px;
+        height: 6px;
+        width: 0;
+        background: #00ff88;
+        box-shadow: 0 0 8px rgba(0, 255, 136, 0.8);
+        transition: width 160ms linear;
+      }
+
+      body.boot-complete #boot-screen {
+        display: none;
+      }
     </style>
   </head>
-  <body>
+  <body class="theme-crt">
+    <!-- BOOT SCREEN -->
+    <div id="boot-screen">
+      <div id="boot-inner">
+        <div id="boot-title">&gt; booting iamrocco.me _</div>
+        <div id="boot-log"></div>
+        <div id="boot-progress">
+          initializing identity core
+          <div id="boot-bar"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="crt">
       <div class="frame">
         <div class="frame-header">
@@ -412,18 +571,19 @@
             <span class="dot green"></span>
           </div>
           <div class="title-bar">iamrocco.me — /home/rocco</div>
-          <div style="width: 44px"></div>
+          <div style="width: 120px; text-align: right; font-size: 13px">
+            <span id="mode-label">mode: crt</span>
+          </div>
         </div>
 
         <div class="frame-body">
-          <!-- NAV -->
+          <!-- NAV SIMPLES -->
           <nav class="nav">
-            <span>&gt;</span>
-            <a href="#top" class="active">home</a>
-            <a href="#about">about</a>
-            <a href="#projects">projects</a>
-            <a href="#lab">lab</a>
-            <a href="#contact">contact</a>
+            <span class="nav-prefix">&gt;</span>
+            <span class="nav-label">iamrocco.me // identity online</span>
+            <button id="mode-toggle" class="mode-toggle" type="button">
+              mode: crt
+            </button>
           </nav>
 
           <div class="grid" id="top">
@@ -431,7 +591,9 @@
             <div>
               <!-- HERO -->
               <section class="fade-in">
-                <div class="hero-sub">identity: <span>rocco</span></div>
+                <div class="hero-sub">
+                  identity: <span>rocco</span>
+                </div>
                 <h1>&gt; iamrocco.me</h1>
                 <p class="hero-tagline">
                   criador de soluções, ideias e experiências digitais. gosto de
@@ -457,7 +619,7 @@
               </section>
 
               <!-- ABOUT -->
-              <section id="about" class="fade-in delayed">
+              <section class="fade-in delayed">
                 <h2 class="section-title">/about <span>// sobre</span></h2>
                 <p>
                   curto entender como as coisas se encaixam, desmontar, remontar
@@ -480,7 +642,7 @@
             <!-- COL DIREITA -->
             <div>
               <!-- PROJECTS -->
-              <section id="projects" class="fade-in delayed">
+              <section class="fade-in delayed">
                 <h2 class="section-title">/projects <span>// projetos</span></h2>
                 <p class="section-caption">
                   alguns dos projetos que carregam bem a minha vibe:
@@ -560,7 +722,7 @@
               </section>
 
               <!-- LAB -->
-              <section id="lab" class="fade-in delayed">
+              <section class="fade-in delayed">
                 <h2 class="section-title">/lab <span>// laboratório</span></h2>
                 <p>
                   espaço reservado pra experimentos, conceitos estranhos, ideias
@@ -574,7 +736,7 @@
               </section>
 
               <!-- CONTACT -->
-              <section id="contact" class="fade-in delayed">
+              <section class="fade-in delayed">
                 <h2 class="section-title">
                   /contact <span>// contato</span>
                 </h2>
@@ -604,5 +766,69 @@
         </div>
       </div>
     </div>
+
+    <script>
+      // BOOT ANIMATION
+      (function () {
+        const lines = [
+          "loading core modules...",
+          "initializing identity kernel...",
+          "mounting /home/rocco...",
+          "scanning projects...",
+          "enabling lab environment...",
+          "starting visual layer...",
+          "ok, we're live."
+        ];
+
+        const bootLog = document.getElementById("boot-log");
+        const bootBar = document.getElementById("boot-bar");
+        let idx = 0;
+
+        function step() {
+          if (idx < lines.length) {
+            bootLog.textContent += lines[idx] + "\n";
+            const progress = ((idx + 1) / lines.length) * 100;
+            bootBar.style.width = progress + "%";
+            idx++;
+            setTimeout(step, 280);
+          } else {
+            setTimeout(() => {
+              document.body.classList.add("boot-complete");
+            }, 450);
+          }
+        }
+
+        step();
+      })();
+
+      // THEME TOGGLE
+      (function () {
+        const btn = document.getElementById("mode-toggle");
+        const label = document.getElementById("mode-label");
+        const MODES = ["crt", "neon"];
+        let current = 0;
+
+        function applyMode() {
+          const mode = MODES[current];
+          if (mode === "crt") {
+            document.body.classList.remove("theme-neon");
+            document.body.classList.add("theme-crt");
+          } else {
+            document.body.classList.remove("theme-crt");
+            document.body.classList.add("theme-neon");
+          }
+          btn.textContent = "mode: " + mode;
+          label.textContent = "mode: " + mode;
+        }
+
+        btn.addEventListener("click", () => {
+          current = (current + 1) % MODES.length;
+          applyMode();
+        });
+
+        // modo inicial
+        applyMode();
+      })();
+    </script>
   </body>
 </html>
