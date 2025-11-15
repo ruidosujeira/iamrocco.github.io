@@ -15,6 +15,7 @@
       --text-muted: #777777;
       --badge-bg: #f5f8ff;
       --badge-border: #dde6ff;
+      --row-alt: #edf3ff;
     }
 
     * {
@@ -71,6 +72,7 @@
     .profile-name {
       margin: 0;
       font-size: 1.1rem;
+      color: #2b4c99;
     }
 
     .profile-tagline {
@@ -127,27 +129,43 @@
     }
 
     .box-title {
-      margin: 0 0 0.5rem;
+      margin: -0.25rem -1rem 0.5rem;
+      padding: 0.35rem 1rem;
       font-size: 0.95rem;
       text-transform: lowercase;
-      color: var(--link-hover);
+      color: #2b4c99;
+      font-weight: 600;
+      background: linear-gradient(to bottom, #eef3ff, #dde7ff);
+      border-bottom: 1px solid #c5d4f1;
     }
 
     .info-table {
       margin: 0;
+      border-radius: 3px;
+      overflow: hidden;
     }
 
     .info-row {
       display: grid;
       grid-template-columns: 130px 1fr;
       column-gap: 0.5rem;
-      padding: 1px 0;
+      padding: 4px 6px;
       font-size: 0.83rem;
+      box-shadow: inset 0 1px 0 #ffffff;
+    }
+
+    .info-row:nth-child(odd) {
+      background: var(--row-alt); /* azul clarinho */
+    }
+
+    .info-row:nth-child(even) {
+      background: #ffffff; /* branco */
     }
 
     .info-label {
-      color: var(--text-muted);
+      color: #2b4c99; /* azul mais escuro */
       text-transform: lowercase;
+      font-weight: 600;
     }
 
     .info-value {
@@ -158,7 +176,17 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 0.5rem;
+      margin: -0.25rem -1rem 0.5rem;
+      padding: 0.35rem 1rem;
+      background: linear-gradient(to bottom, #eef3ff, #dde7ff);
+      border-bottom: 1px solid #c5d4f1;
+    }
+
+    .box-header-title {
+      font-size: 0.95rem;
+      text-transform: lowercase;
+      color: #2b4c99;
+      font-weight: 600;
     }
 
     .box-header-count {
@@ -235,7 +263,7 @@
 
     .scrap-author {
       font-weight: 600;
-      color: var(--link-hover);
+      color: #2b4c99;
     }
 
     .scrap-date {
@@ -319,7 +347,7 @@
         />
         <h1 class="profile-name" id="profile-name">Rocco</h1>
         <p class="profile-tagline" id="profile-tagline">
-          desenvolvedor open-source & criador de ferramentas esquisitamente úteis
+          desenvolvedor open-source & criador do Perf Fiscal (eslint-plugin-perf-fiscal)
         </p>
 
         <nav class="sidebar-menu">
@@ -342,17 +370,13 @@
       <!-- PERFIL / SOCIAL -->
       <section id="perfil" class="box">
         <h2 class="box-title">social</h2>
-        <div class="info-table" id="info-table">
-          <!-- preenchido via JS -->
-        </div>
+        <div class="info-table" id="info-table"></div>
       </section>
 
       <!-- RECADOS / BLOG -->
       <section id="recados" class="box">
         <h2 class="box-title">recados / dev-log</h2>
-        <ul class="scraps-list" id="scraps-list">
-          <!-- preenchido via JS -->
-        </ul>
+        <ul class="scraps-list" id="scraps-list"></ul>
       </section>
     </main>
 
@@ -361,23 +385,19 @@
       <!-- PROJETOS (amigos) -->
       <section id="projetos" class="box">
         <div class="box-header">
-          <h2 class="box-title">projetos (amigos)</h2>
+          <h2 class="box-header-title">projetos (amigos)</h2>
           <span class="box-header-count" id="projects-count"></span>
         </div>
-        <div class="mini-grid" id="projects-grid">
-          <!-- preenchido via JS -->
-        </div>
+        <div class="mini-grid" id="projects-grid"></div>
       </section>
 
       <!-- STACKS (comunidades) -->
       <section class="box">
         <div class="box-header">
-          <h2 class="box-title">stacks (comunidades)</h2>
+          <h2 class="box-header-title">stacks (comunidades)</h2>
           <span class="box-header-count" id="stacks-count"></span>
         </div>
-        <div class="mini-grid" id="stacks-grid">
-          <!-- preenchido via JS -->
-        </div>
+        <div class="mini-grid" id="stacks-grid"></div>
       </section>
 
       <!-- CONTATO -->
@@ -438,7 +458,6 @@
       { label: "status", value: "sempre em beta, mas deployando assim mesmo" },
     ];
 
-    // mini dev-log
     const scraps = [
       {
         author: "Rocco",
@@ -463,7 +482,6 @@
       },
     ];
 
-    // projetos principais
     const projects = [
       {
         name: "Perf Fiscal",
@@ -487,7 +505,6 @@
       },
     ];
 
-    // stacks usadas (pode trocar ícones/nomes à vontade)
     const stacks = [
       {
         name: "TypeScript",
@@ -516,8 +533,6 @@
     ];
 
     // ================== RENDERIZAÇÃO ==================
-
-    // avatar + textos básicos
     document.getElementById(
       "avatar"
     ).src = `https://github.com/${GITHUB_USERNAME}.png`;
@@ -530,7 +545,6 @@
       .getElementById("github-link")
       .setAttribute("href", `https://github.com/${GITHUB_USERNAME}`);
 
-    // tabela social
     const infoTableEl = document.getElementById("info-table");
     socialInfo.forEach((item) => {
       const row = document.createElement("div");
@@ -549,7 +563,6 @@
       infoTableEl.appendChild(row);
     });
 
-    // recados
     const scrapsListEl = document.getElementById("scraps-list");
     scraps.forEach((scrap) => {
       const li = document.createElement("li");
@@ -586,7 +599,6 @@
       scrapsListEl.appendChild(li);
     });
 
-    // projetos
     const projectsGridEl = document.getElementById("projects-grid");
     document.getElementById(
       "projects-count"
@@ -614,7 +626,6 @@
       projectsGridEl.appendChild(card);
     });
 
-    // stacks
     const stacksGridEl = document.getElementById("stacks-grid");
     document.getElementById(
       "stacks-count"
