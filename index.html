@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <title>iamrocco.me</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Fonte pixel/terminal -->
+
+    <!-- Fonte estilo terminal -->
     <link
       href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
       rel="stylesheet"
@@ -12,18 +13,20 @@
 
     <style>
       :root {
-        --bg: #050607;
-        --bg-soft: #070a10;
         --green: #00ff88;
         --green-soft: #7af7c8;
-        --green-dark: #008851;
-        --accent: #9d4dff;
+        --green-dark: #00995b;
+        --bg-crt: #050607;
+        --bg-neon: #0c0216;
+        --bg-night: #05070f;
+        --accent-neon: #c47dff;
+        --accent-night: #4fd6ff;
       }
 
       * {
-        box-sizing: border-box;
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
       }
 
       html,
@@ -33,90 +36,33 @@
 
       body {
         font-family: "VT323", monospace;
-        font-size: 18px;
+        background: #000;
+        color: var(--green-soft);
         overflow-x: hidden;
       }
 
-      /* THEMES */
+      /* ---------- TEMAS ---------- */
 
       body.theme-crt {
-        background: radial-gradient(circle at top, #151a2a 0, var(--bg) 55%);
+        background: radial-gradient(circle at top, #151a2a 0, var(--bg-crt) 55%);
         color: var(--green-soft);
-        text-shadow: 0 0 4px rgba(0, 255, 136, 0.5);
+        text-shadow: 0 0 4px rgba(0, 255, 136, 0.6);
       }
 
       body.theme-neon {
-        background: radial-gradient(circle at top, #1a1030 0, #05030a 55%);
-        color: #f0e6ff;
-        text-shadow: 0 0 6px rgba(189, 140, 255, 0.8);
+        background: radial-gradient(circle at top, #260040 0, var(--bg-neon) 60%);
+        color: #f3deff;
+        text-shadow: 0 0 8px rgba(196, 125, 255, 0.8);
       }
 
-      body.theme-neon .frame {
-        border-color: rgba(157, 77, 255, 0.6);
-        box-shadow:
-          0 0 20px rgba(0, 0, 0, 0.9),
-          0 0 28px rgba(157, 77, 255, 0.3);
-        background: linear-gradient(
-          135deg,
-          rgba(2, 0, 20, 0.95),
-          rgba(10, 0, 40, 0.98)
-        );
+      body.theme-night {
+        background: radial-gradient(circle at top, #020b1e 0, var(--bg-night) 60%);
+        color: #d9f3ff;
+        text-shadow: 0 0 6px rgba(79, 214, 255, 0.6);
       }
 
-      body.theme-neon .section-title {
-        color: #ffb3ff;
-      }
-
-      body.theme-neon .project-card {
-        border-color: rgba(157, 77, 255, 0.5);
-        background: rgba(3, 0, 18, 0.8);
-      }
-
-      body.theme-neon .project-card:hover {
-        border-color: #ffb3ff;
-        box-shadow: 0 0 12px rgba(157, 77, 255, 0.5);
-      }
-
-      body.theme-neon .pill {
-        border-color: rgba(214, 137, 255, 0.7);
-        background: rgba(10, 0, 40, 0.8);
-      }
-
-      body.theme-neon .status-line {
-        color: rgba(230, 206, 255, 0.8);
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      .crt {
-        position: relative;
-        min-height: 100vh;
-        padding: 24px 24px 40px;
-        display: flex;
-        justify-content: center;
-      }
-
-      .crt::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background: repeating-linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 0.4) 0px,
-          rgba(0, 0, 0, 0.4) 1px,
-          transparent 1px,
-          transparent 3px
-        );
-        opacity: 0.26;
-        mix-blend-mode: soft-light;
-        z-index: 20;
-      }
-
-      .crt::after {
+      /* vinheta + scanlines animadas */
+      body::before {
         content: "";
         position: fixed;
         inset: 0;
@@ -124,35 +70,90 @@
         background: radial-gradient(
           circle at center,
           transparent 0,
-          transparent 55%,
+          transparent 50%,
           rgba(0, 0, 0, 0.9) 100%
         );
-        opacity: 0.8;
-        z-index: 19;
+        z-index: 5;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(0, 255, 136, 0.06) 0px,
+          rgba(0, 255, 136, 0.06) 1px,
+          transparent 3px
+        );
+        mix-blend-mode: soft-light;
+        opacity: 0.3;
+        animation: scan 7s linear infinite;
+        z-index: 6;
+      }
+
+      @keyframes scan {
+        0% {
+          background-position-y: 0;
+        }
+        100% {
+          background-position-y: 6px;
+        }
+      }
+
+      /* ---------- LAYOUT PRINCIPAL ---------- */
+
+      .crt {
+        position: relative;
+        min-height: 100vh;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
       }
 
       .frame {
         position: relative;
         width: 100%;
-        max-width: 1200px; /* mais largo, ocupa bem a tela */
+        max-width: 1480px;
+        margin: 0 auto;
+        min-height: 100vh;
         border: 1px solid rgba(0, 255, 136, 0.4);
         background: linear-gradient(
           135deg,
           rgba(0, 0, 0, 0.9),
           rgba(5, 10, 15, 0.98)
         );
-        padding: 16px 18px 26px;
-        z-index: 1;
+        padding: 16px 22px 26px;
         box-shadow:
-          0 0 20px rgba(0, 0, 0, 0.8),
-          0 0 24px rgba(0, 255, 136, 0.12);
+          0 0 20px rgba(0, 0, 0, 0.9),
+          0 0 28px rgba(0, 255, 136, 0.16);
+        z-index: 10;
+        overflow-y: auto;
+      }
+
+      body.theme-neon .frame {
+        border-color: rgba(196, 125, 255, 0.6);
+        box-shadow:
+          0 0 22px rgba(0, 0, 0, 0.9),
+          0 0 30px rgba(196, 125, 255, 0.35);
+        background: radial-gradient(circle at top left, #200033 0, #050008 55%);
+      }
+
+      body.theme-night .frame {
+        border-color: rgba(79, 214, 255, 0.7);
+        box-shadow:
+          0 0 22px rgba(0, 0, 0, 0.9),
+          0 0 30px rgba(79, 214, 255, 0.35);
+        background: radial-gradient(circle at top, #001326 0, #03060d 55%);
       }
 
       .frame-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
       }
 
       .window-dots {
@@ -164,7 +165,7 @@
         width: 9px;
         height: 9px;
         border-radius: 50%;
-        border: 1px solid rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.9);
       }
 
       .dot.red {
@@ -184,79 +185,66 @@
         opacity: 0.8;
       }
 
+      .header-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 13px;
+      }
+
+      .btn {
+        font-family: inherit;
+        font-size: 13px;
+        padding: 2px 10px;
+        border-radius: 3px;
+        border: 1px solid rgba(0, 255, 136, 0.6);
+        background: rgba(0, 0, 0, 0.7);
+        color: inherit;
+        cursor: pointer;
+        text-shadow: inherit;
+        transition:
+          transform 90ms ease-out,
+          box-shadow 90ms ease-out,
+          background 90ms ease-out;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+        background: rgba(0, 0, 0, 0.9);
+      }
+
+      body.theme-neon .btn {
+        border-color: rgba(196, 125, 255, 0.9);
+        box-shadow: 0 0 8px rgba(196, 125, 255, 0.4);
+      }
+
+      body.theme-night .btn {
+        border-color: rgba(79, 214, 255, 0.9);
+        box-shadow: 0 0 8px rgba(79, 214, 255, 0.4);
+      }
+
       .frame-body {
         border-top: 1px solid rgba(0, 255, 136, 0.3);
-        padding-top: 12px;
+        padding-top: 14px;
       }
 
-      /* NAVBAR SIMPLIFICADA */
-
-      .nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-bottom: 20px;
-        font-size: 16px;
-        align-items: center;
-      }
-
-      .nav-prefix {
-        opacity: 0.7;
-      }
-
-      .nav-label {
-        padding: 2px 10px;
-        border-radius: 3px;
-        border: 1px solid rgba(0, 255, 136, 0.5);
-        background: rgba(0, 0, 0, 0.6);
-        font-size: 15px;
-      }
-
-      body.theme-neon .nav-label {
-        border-color: rgba(157, 77, 255, 0.75);
-        box-shadow: 0 0 10px rgba(157, 77, 255, 0.25);
-      }
-
-      .mode-toggle {
-        margin-left: auto;
-        font-size: 14px;
-        padding: 2px 10px;
-        border-radius: 3px;
-        border: 1px solid rgba(0, 255, 136, 0.5);
-        background: rgba(0, 0, 0, 0.6);
-        cursor: pointer;
-        transition:
-          background 90ms ease-out,
-          transform 90ms ease-out,
-          box-shadow 90ms ease-out;
-      }
-
-      .mode-toggle:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
-      }
-
-      body.theme-neon .mode-toggle {
-        border-color: rgba(157, 77, 255, 0.75);
-        box-shadow: 0 0 10px rgba(157, 77, 255, 0.25);
-      }
-
-      /* LAYOUT */
+      /* GRID */
 
       .grid {
         display: grid;
-        grid-template-columns: minmax(0, 3fr);
-        gap: 32px;
+        grid-template-columns: minmax(0, 3.6fr) minmax(0, 2.4fr);
+        gap: 30px;
       }
 
-      @media (min-width: 950px) {
+      @media (max-width: 980px) {
         .grid {
-          grid-template-columns: minmax(0, 3.5fr) minmax(0, 2.5fr);
+          grid-template-columns: minmax(0, 1fr);
         }
       }
 
       section {
-        margin-bottom: 26px;
+        margin-bottom: 28px;
       }
 
       h1,
@@ -265,41 +253,47 @@
       }
 
       h1 {
-        font-size: 40px;
+        font-size: 42px;
         color: var(--green);
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         letter-spacing: 0.12em;
         text-transform: uppercase;
+        text-shadow: 0 0 10px rgba(0, 255, 136, 0.9);
       }
 
       body.theme-neon h1 {
-        color: #ffb3ff;
+        color: var(--accent-neon);
+        text-shadow: 0 0 14px rgba(196, 125, 255, 1);
+      }
+
+      body.theme-night h1 {
+        color: var(--accent-night);
+        text-shadow: 0 0 12px rgba(79, 214, 255, 1);
       }
 
       .hero-sub {
         font-size: 16px;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
       }
 
       .hero-tagline {
-        font-size: 15px;
-        margin-bottom: 18px;
-        max-width: 38rem;
+        font-size: 16px;
+        margin-bottom: 16px;
+        max-width: 40rem;
       }
 
       .hero-meta {
         font-size: 15px;
         margin-bottom: 6px;
-      }
-
-      .hero-meta,
-      .hero-tagline {
         color: rgba(192, 255, 227, 0.9);
       }
 
-      body.theme-neon .hero-meta,
-      body.theme-neon .hero-tagline {
-        color: rgba(240, 220, 255, 0.9);
+      body.theme-neon .hero-meta {
+        color: rgba(243, 214, 255, 0.94);
+      }
+
+      body.theme-night .hero-meta {
+        color: rgba(205, 236, 255, 0.94);
       }
 
       .pill-row {
@@ -311,140 +305,34 @@
 
       .pill {
         border-radius: 14px;
-        border: 1px solid rgba(0, 255, 136, 0.4);
+        border: 1px solid rgba(0, 255, 136, 0.6);
         padding: 3px 10px;
         font-size: 13px;
-        background: rgba(0, 0, 0, 0.45);
+        background: rgba(0, 0, 0, 0.55);
       }
 
-      .section-title {
-        font-size: 18px;
-        margin-bottom: 6px;
-        color: var(--green);
+      body.theme-neon .pill {
+        border-color: rgba(196, 125, 255, 0.9);
+        background: rgba(18, 0, 38, 0.9);
       }
 
-      .section-title span {
-        color: rgba(140, 255, 204, 0.8);
-      }
-
-      body.theme-neon .section-title span {
-        color: rgba(230, 206, 255, 0.9);
-      }
-
-      .section-caption {
-        font-size: 14px;
-        color: rgba(166, 255, 220, 0.8);
-        margin-bottom: 10px;
-      }
-
-      body.theme-neon .section-caption {
-        color: rgba(225, 206, 255, 0.9);
-      }
-
-      p {
-        line-height: 1.4;
-        margin-bottom: 8px;
-      }
-
-      .muted {
-        color: rgba(140, 255, 204, 0.7);
-      }
-
-      body.theme-neon .muted {
-        color: rgba(220, 206, 255, 0.8);
-      }
-
-      .project-list {
-        display: grid;
-        gap: 10px;
-      }
-
-      .project-card {
-        border: 1px solid rgba(0, 255, 136, 0.3);
-        background: rgba(0, 0, 0, 0.65);
-        padding: 10px 12px;
-        border-radius: 3px;
-        transition:
-          border-color 90ms ease-out,
-          background 90ms ease-out,
-          transform 90ms ease-out,
-          box-shadow 90ms ease-out;
-        cursor: default;
-      }
-
-      .project-card.clickable {
-        cursor: pointer;
-      }
-
-      .project-card:hover {
-        border-color: var(--green);
-        background: rgba(0, 0, 0, 0.9);
-        transform: translateY(-1px);
-        box-shadow: 0 0 10px rgba(0, 255, 136, 0.15);
-      }
-
-      .project-header {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        margin-bottom: 4px;
-      }
-
-      .project-name {
-        font-size: 16px;
-        color: var(--green);
-      }
-
-      body.theme-neon .project-name {
-        color: #ffb3ff;
-      }
-
-      .project-tag {
-        font-size: 12px;
-        color: rgba(140, 255, 204, 0.8);
-      }
-
-      body.theme-neon .project-tag {
-        color: rgba(230, 206, 255, 0.9);
-      }
-
-      .project-desc {
-        font-size: 14px;
-        color: rgba(188, 255, 231, 0.9);
-      }
-
-      body.theme-neon .project-desc {
-        color: rgba(238, 226, 255, 0.93);
-      }
-
-      .project-meta {
-        margin-top: 4px;
-        font-size: 13px;
-        color: rgba(144, 255, 210, 0.7);
-      }
-
-      body.theme-neon .project-meta {
-        color: rgba(221, 206, 255, 0.84);
-      }
-
-      .lab-note {
-        font-size: 14px;
-        margin-top: 4px;
-      }
-
-      .contact {
-        font-size: 14px;
-      }
-
-      .contact a {
-        text-decoration: underline;
-        text-decoration-style: dotted;
+      body.theme-night .pill {
+        border-color: rgba(79, 214, 255, 0.9);
+        background: rgba(2, 10, 20, 0.9);
       }
 
       .status-line {
-        margin-top: 10px;
-        font-size: 13px;
-        color: rgba(120, 255, 199, 0.7);
+        margin-top: 12px;
+        font-size: 14px;
+        color: rgba(150, 255, 210, 0.85);
+      }
+
+      body.theme-neon .status-line {
+        color: rgba(233, 208, 255, 0.9);
+      }
+
+      body.theme-night .status-line {
+        color: rgba(189, 230, 255, 0.9);
       }
 
       .prompt {
@@ -452,7 +340,11 @@
       }
 
       body.theme-neon .prompt {
-        color: #ffb3ff;
+        color: var(--accent-neon);
+      }
+
+      body.theme-night .prompt {
+        color: var(--accent-night);
       }
 
       .cursor {
@@ -472,27 +364,155 @@
         }
       }
 
-      .fade-in {
-        opacity: 0;
-        transform: translateY(4px);
-        animation: fade 0.4s ease-out forwards;
+      .section-title {
+        font-size: 18px;
+        margin-bottom: 6px;
+        color: var(--green);
       }
 
-      .fade-in.delayed {
-        animation-delay: 0.2s;
+      body.theme-neon .section-title {
+        color: var(--accent-neon);
       }
 
-      @keyframes fade {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+      body.theme-night .section-title {
+        color: var(--accent-night);
+      }
+
+      .section-title span {
+        color: rgba(140, 255, 204, 0.85);
+      }
+
+      body.theme-neon .section-title span {
+        color: rgba(243, 213, 255, 0.95);
+      }
+
+      body.theme-night .section-title span {
+        color: rgba(200, 236, 255, 0.95);
+      }
+
+      .section-caption {
+        font-size: 14px;
+        margin-bottom: 10px;
+        color: rgba(160, 255, 216, 0.9);
+      }
+
+      p {
+        line-height: 1.4;
+        font-size: 15px;
+        margin-bottom: 7px;
+      }
+
+      .muted {
+        color: rgba(140, 255, 204, 0.75);
+        font-size: 14px;
+      }
+
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 12px;
+        margin-top: 10px;
+      }
+
+      .project-card {
+        border-radius: 3px;
+        border: 1px solid rgba(0, 255, 136, 0.4);
+        background: rgba(0, 0, 0, 0.7);
+        padding: 10px 11px;
+        transition:
+          border-color 90ms ease-out,
+          box-shadow 90ms ease-out,
+          transform 90ms ease-out,
+          background 90ms ease-out;
+        cursor: default;
+      }
+
+      .project-card.clickable {
+        cursor: pointer;
+      }
+
+      .project-card:hover {
+        border-color: var(--green);
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+        transform: translateY(-1px);
+        background: rgba(0, 0, 0, 0.95);
+      }
+
+      body.theme-neon .project-card {
+        border-color: rgba(196, 125, 255, 0.5);
+        background: rgba(10, 0, 28, 0.95);
+      }
+
+      body.theme-neon .project-card:hover {
+        border-color: rgba(255, 191, 255, 0.9);
+        box-shadow: 0 0 10px rgba(196, 125, 255, 0.7);
+      }
+
+      body.theme-night .project-card {
+        border-color: rgba(79, 214, 255, 0.6);
+        background: rgba(0, 7, 18, 0.95);
+      }
+
+      body.theme-night .project-card:hover {
+        border-color: rgba(178, 233, 255, 0.9);
+        box-shadow: 0 0 10px rgba(79, 214, 255, 0.7);
+      }
+
+      .project-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 4px;
+      }
+
+      .project-name {
+        font-size: 15px;
+        color: var(--green);
+      }
+
+      body.theme-neon .project-name {
+        color: var(--accent-neon);
+      }
+
+      body.theme-night .project-name {
+        color: var(--accent-night);
+      }
+
+      .project-tag {
+        font-size: 12px;
+        opacity: 0.85;
+      }
+
+      .project-desc {
+        font-size: 14px;
+      }
+
+      .project-meta {
+        font-size: 13px;
+        margin-top: 3px;
+        opacity: 0.9;
+      }
+
+      .lab-note {
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      .contact {
+        font-size: 14px;
+      }
+
+      .contact a {
+        color: inherit;
+        text-decoration: underline;
+        text-decoration-style: dotted;
       }
 
       footer {
-        margin-top: 10px;
+        margin-top: 14px;
         font-size: 12px;
         text-align: right;
+        opacity: 0.9;
       }
 
       footer span {
@@ -500,18 +520,22 @@
       }
 
       body.theme-neon footer span {
-        color: #ffb3ff;
+        color: var(--accent-neon);
       }
 
-      /* BOOT SCREEN */
+      body.theme-night footer span {
+        color: var(--accent-night);
+      }
+
+      /* ---------- BOOT SCREEN ---------- */
 
       #boot-screen {
         position: fixed;
         inset: 0;
         background: #020202;
-        color: #00ff88;
+        color: var(--green-soft);
         font-family: "VT323", monospace;
-        padding: 40px 24px;
+        padding: 40px 20px;
         z-index: 999;
         display: flex;
         justify-content: center;
@@ -520,50 +544,119 @@
 
       #boot-inner {
         width: 100%;
-        max-width: 720px;
+        max-width: 740px;
         font-size: 18px;
         white-space: pre-line;
       }
 
       #boot-title {
         margin-bottom: 12px;
+        color: var(--green);
+      }
+
+      #boot-log {
+        min-height: 120px;
       }
 
       #boot-progress {
         margin-top: 10px;
         font-size: 14px;
-        color: rgba(140, 255, 204, 0.9);
+        color: rgba(160, 255, 216, 0.9);
+      }
+
+      #boot-bar-wrap {
+        margin-top: 4px;
+        width: 100%;
+        height: 6px;
+        background: rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(0, 255, 136, 0.6);
+        box-shadow: 0 0 6px rgba(0, 255, 136, 0.8);
       }
 
       #boot-bar {
-        margin-top: 4px;
-        height: 6px;
+        height: 100%;
         width: 0;
-        background: #00ff88;
-        box-shadow: 0 0 8px rgba(0, 255, 136, 0.8);
-        transition: width 160ms linear;
+        background: var(--green);
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.9);
+        transition: width 170ms linear;
       }
 
       body.boot-complete #boot-screen {
         display: none;
       }
+
+      /* ---------- GLITCH ---------- */
+
+      @keyframes glitch-shift {
+        0% {
+          transform: translate(0, 0);
+          filter: hue-rotate(0deg);
+        }
+        20% {
+          transform: translate(-2px, 1px);
+          filter: hue-rotate(10deg);
+        }
+        40% {
+          transform: translate(2px, -1px);
+          filter: hue-rotate(-10deg);
+        }
+        60% {
+          transform: translate(-1px, 2px);
+        }
+        80% {
+          transform: translate(1px, -2px);
+        }
+        100% {
+          transform: translate(0, 0);
+          filter: hue-rotate(0deg);
+        }
+      }
+
+      body.glitch .frame {
+        animation: glitch-shift 220ms steps(2, end) 4;
+      }
+
+      /* ---------- RESPONSIVO ---------- */
+
+      @media (max-width: 720px) {
+        .frame {
+          padding: 12px 12px 20px;
+        }
+
+        h1 {
+          font-size: 32px;
+        }
+
+        .hero-tagline {
+          font-size: 14px;
+        }
+
+        .hero-meta {
+          font-size: 14px;
+        }
+      }
     </style>
   </head>
   <body class="theme-crt">
+    <!-- AUDIO DE BOOT (coloque um arquivo boot-sound.mp3 na raiz do site) -->
+    <audio id="boot-sound" src="boot-sound.mp3" preload="auto"></audio>
+
     <!-- BOOT SCREEN -->
     <div id="boot-screen">
       <div id="boot-inner">
         <div id="boot-title">&gt; booting iamrocco.me _</div>
         <div id="boot-log"></div>
         <div id="boot-progress">
-          initializing identity core
-          <div id="boot-bar"></div>
+          initializing identity core...
+          <div id="boot-bar-wrap">
+            <div id="boot-bar"></div>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="crt">
-      <div class="frame">
+      <div class="frame" id="frame">
         <div class="frame-header">
           <div class="window-dots">
             <span class="dot red"></span>
@@ -571,32 +664,22 @@
             <span class="dot green"></span>
           </div>
           <div class="title-bar">iamrocco.me — /home/rocco</div>
-          <div style="width: 120px; text-align: right; font-size: 13px">
+          <div class="header-controls">
             <span id="mode-label">mode: crt</span>
+            <button id="mode-toggle" class="btn" type="button">toggle mode</button>
+            <button id="glitch-btn" class="btn" type="button">glitch</button>
           </div>
         </div>
 
         <div class="frame-body">
-          <!-- NAV SIMPLES -->
-          <nav class="nav">
-            <span class="nav-prefix">&gt;</span>
-            <span class="nav-label">iamrocco.me // identity online</span>
-            <button id="mode-toggle" class="mode-toggle" type="button">
-              mode: crt
-            </button>
-          </nav>
-
-          <div class="grid" id="top">
+          <div class="grid">
             <!-- COL ESQUERDA -->
             <div>
-              <!-- HERO -->
-              <section class="fade-in">
-                <div class="hero-sub">
-                  identity: <span>rocco</span>
-                </div>
+              <section>
+                <div class="hero-sub">identity: rocco</div>
                 <h1>&gt; iamrocco.me</h1>
                 <p class="hero-tagline">
-                  criador de soluções, ideias e experiências digitais. gosto de
+                  criador de soluções, ideias e experiências digitais. curto
                   transformar conceitos soltos em algo concreto, funcional e com
                   personalidade.
                 </p>
@@ -618,21 +701,23 @@
                 </div>
               </section>
 
-              <!-- ABOUT -->
-              <section class="fade-in delayed">
-                <h2 class="section-title">/about <span>// sobre</span></h2>
+              <section>
+                <h2 class="section-title">
+                  /about <span>// sobre</span>
+                </h2>
                 <p>
                   curto entender como as coisas se encaixam, desmontar, remontar
-                  e criar algo que tenha estética, propósito e impacto real.
-                  isso pode ser um sistema grande, um protótipo rápido ou um
-                  experimento que só faz sentido depois que fica pronto.
+                  e criar algo que tenha estética, propósito e impacto real. às
+                  vezes isso é um sistema grande, às vezes é um protótipo
+                  estranho que só faz sentido depois que existe.
                 </p>
                 <p>
-                  o objetivo é sempre o mesmo: clareza, qualidade e criatividade
-                  aplicada. menos papo, mais coisa existindo no mundo.
+                  foco em clareza, qualidade e criatividade aplicada. menos papo
+                  e mais coisa aparecendo no mundo — mesmo que metade seja
+                  experimento.
                 </p>
                 <p class="muted">
-                  stack favorita no momento: javascript / typescript, node.js,
+                  stack favorita no momento: javascript / typescript / node.js /
                   react e qualquer coisa que me deixe brincar com comportamento,
                   fluxo e experiência.
                 </p>
@@ -641,14 +726,15 @@
 
             <!-- COL DIREITA -->
             <div>
-              <!-- PROJECTS -->
-              <section class="fade-in delayed">
-                <h2 class="section-title">/projects <span>// projetos</span></h2>
+              <section>
+                <h2 class="section-title">
+                  /projects <span>// projetos</span>
+                </h2>
                 <p class="section-caption">
                   alguns dos projetos que carregam bem a minha vibe:
                 </p>
 
-                <div class="project-list">
+                <div class="projects-grid">
                   <a
                     class="project-card clickable"
                     href="https://github.com/ruidosujeira/perf-linter"
@@ -659,12 +745,11 @@
                       <div class="project-name">Perf Fiscal</div>
                       <div class="project-tag">devtool autoral</div>
                     </div>
-                    <p class="project-desc">
+                    <div class="project-desc">
                       eslint plugin próprio, focado em revelar padrões
                       problemáticos em apps reais. mistura análise de código com
-                      uma visão prática de como as pessoas realmente
-                      desenvolvem.
-                    </p>
+                      uma visão prática de como as pessoas realmente desenvolvem.
+                    </div>
                     <div class="project-meta">
                       { js / ts / node / ferramentas pra devs curiosos }
                     </div>
@@ -675,13 +760,13 @@
                       <div class="project-name">Knob</div>
                       <div class="project-tag">feed controlável</div>
                     </div>
-                    <p class="project-desc">
+                    <div class="project-desc">
                       conceito de feed onde o usuário mexe em sliders pra
                       controlar o algoritmo. explora percepção, escolha e
                       transparência em sistemas de recomendação.
-                    </p>
+                    </div>
                     <div class="project-meta">
-                      experimento em cima de: interface, ranking, comportamento.
+                      interface, ranking e comportamento brincando juntos.
                     </div>
                   </div>
 
@@ -690,13 +775,13 @@
                       <div class="project-name">Swap</div>
                       <div class="project-tag">social experimental</div>
                     </div>
-                    <p class="project-desc">
-                      ideia que mistura dinâmica de reels com decisão rápida
-                      estilo tinder. foco em entender como micro-escolhas
-                      definem o que continua, o que some e o que prende atenção.
-                    </p>
+                    <div class="project-desc">
+                      mistura dinâmica de reels com decisão rápida estilo
+                      tinder. foco em entender como micro-escolhas definem o que
+                      continua, o que some e o que prende atenção.
+                    </div>
                     <div class="project-meta">
-                      projeto em mutação constante — como a internet.
+                      projeto em mutação constante — igual a internet.
                     </div>
                   </div>
 
@@ -710,10 +795,10 @@
                       <div class="project-name">mais coisas</div>
                       <div class="project-tag">github</div>
                     </div>
-                    <p class="project-desc">
-                      tem sempre alguma coisa nova em teste, quebrando padrão ou
-                      indo longe demais num detalhe.
-                    </p>
+                    <div class="project-desc">
+                      sempre tem alguma coisa nova em teste, quebrando padrão ou
+                      indo longe demais em algum detalhe.
+                    </div>
                     <div class="project-meta">
                       &gt; explorar repositórios
                     </div>
@@ -721,22 +806,22 @@
                 </div>
               </section>
 
-              <!-- LAB -->
-              <section class="fade-in delayed">
-                <h2 class="section-title">/lab <span>// laboratório</span></h2>
+              <section>
+                <h2 class="section-title">
+                  /lab <span>// laboratório</span>
+                </h2>
                 <p>
                   espaço reservado pra experimentos, conceitos estranhos, ideias
                   rápidas e coisas que talvez nunca virem produto — mas dizem
                   muito sobre como eu penso.
                 </p>
                 <p class="lab-note">
-                  ainda em construção. provavelmente quando você voltar aqui já
-                  vai ter algo novo quebrando alguma regra.
+                  se você voltar aqui depois, provavelmente alguma coisa já vai
+                  ter quebrado alguma regra nova.
                 </p>
               </section>
 
-              <!-- CONTACT -->
-              <section class="fade-in delayed">
+              <section>
                 <h2 class="section-title">
                   /contact <span>// contato</span>
                 </h2>
@@ -751,8 +836,7 @@
                     target="_blank"
                     rel="noreferrer"
                     >@ruidosujeira</a
-                  >
-                  <br />
+                  ><br />
                   &gt; melhor jeito de falar sobre código: abrir uma issue bem
                   escrita.
                 </p>
@@ -768,7 +852,7 @@
     </div>
 
     <script>
-      // BOOT ANIMATION
+      // ---------- BOOT ----------
       (function () {
         const lines = [
           "loading core modules...",
@@ -782,6 +866,7 @@
 
         const bootLog = document.getElementById("boot-log");
         const bootBar = document.getElementById("boot-bar");
+        const bootSound = document.getElementById("boot-sound");
         let idx = 0;
 
         function step() {
@@ -790,34 +875,32 @@
             const progress = ((idx + 1) / lines.length) * 100;
             bootBar.style.width = progress + "%";
             idx++;
-            setTimeout(step, 280);
+            setTimeout(step, 260);
           } else {
             setTimeout(() => {
+              // tenta tocar o som (alguns browsers pedem interação prévia)
+              if (bootSound && typeof bootSound.play === "function") {
+                bootSound.play().catch(() => {});
+              }
               document.body.classList.add("boot-complete");
-            }, 450);
+            }, 480);
           }
         }
 
         step();
       })();
 
-      // THEME TOGGLE
+      // ---------- MODOS DE TEMA ----------
       (function () {
         const btn = document.getElementById("mode-toggle");
         const label = document.getElementById("mode-label");
-        const MODES = ["crt", "neon"];
+        const MODES = ["crt", "neon", "night"];
         let current = 0;
 
         function applyMode() {
           const mode = MODES[current];
-          if (mode === "crt") {
-            document.body.classList.remove("theme-neon");
-            document.body.classList.add("theme-crt");
-          } else {
-            document.body.classList.remove("theme-crt");
-            document.body.classList.add("theme-neon");
-          }
-          btn.textContent = "mode: " + mode;
+          document.body.classList.remove("theme-crt", "theme-neon", "theme-night");
+          document.body.classList.add("theme-" + mode);
           label.textContent = "mode: " + mode;
         }
 
@@ -828,6 +911,17 @@
 
         // modo inicial
         applyMode();
+      })();
+
+      // ---------- GLITCH ----------
+      (function () {
+        const glitchBtn = document.getElementById("glitch-btn");
+        glitchBtn.addEventListener("click", () => {
+          document.body.classList.add("glitch");
+          setTimeout(() => {
+            document.body.classList.remove("glitch");
+          }, 260);
+        });
       })();
     </script>
   </body>
