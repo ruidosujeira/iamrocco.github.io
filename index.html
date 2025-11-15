@@ -1,83 +1,653 @@
-/* === RESET CORE === */
-body {
-    margin: 0;
-    padding: 0;
-    background: #000;
-    color: #9efca9;
-    font-family: "Courier New", monospace;
-    overflow-x: hidden;
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>iamrocco.me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-/* Remove QUALQUER filtro que estava mudando o tom */
-* {
-    filter: none !important;
-}
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
-/* === CRT EFFECT (GREEN ORIGINAL) === */
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background: repeating-linear-gradient(
-        rgba(0,255,100,0.06) 0px,
-        rgba(0,255,100,0.06) 2px,
+  <style>
+    /* ===================== RESET ===================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      filter: none !important; /* mata qualquer filtro estranho de cor */
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: "VT323", monospace;
+      background: #000;
+      color: #9efca9;
+      overflow-x: hidden;
+    }
+
+    /* ===================== CRT GLOBAL ===================== */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, rgba(0,255,120,0.14) 0, transparent 55%, rgba(0,0,0,0.96) 100%);
+      z-index: 2;
+      mix-blend-mode: screen;
+      opacity: .22;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0,255,120,0.08) 0px,
+        rgba(0,255,120,0.08) 1px,
         transparent 3px
-    );
-    opacity: 0.25;
-    z-index: 10;
-}
-
-/* === CONTAINER FULLSCREEN === */
-.monitor {
-    width: 100vw;
-    min-height: 100vh;
-    padding: clamp(20px, 4vw, 60px);
-    box-sizing: border-box;
-    max-width: none;
-}
-
-/* === GRID FULL RESPONSIVA === */
-.projects-grid {
-    display: grid;
-    width: 100%;
-    margin: 30px 0;
-    gap: clamp(16px, 2vw, 28px);
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
-
-/* === FIX: TEXTOS FICANDO AZUL/ROXO === */
-.card {
-    color: #9efca9 !important;
-    border: 1px solid rgba(0,255,150,0.35);
-    background: rgba(0, 20, 0, 0.25);
-    padding: 16px 20px;
-    border-radius: 4px;
-    text-shadow: 0 0 6px #39ff6f !important;
-}
-
-/* Links corrigidos */
-a, a:visited {
-    color: #9efca9;
-    text-decoration: none;
-}
-
-a:hover {
-    text-shadow: 0 0 8px #39ff6f;
-}
-
-/* Section titles */
-h1, h2 {
-    color: #9efca9;
-    text-shadow: 0 0 10px #39ff6f;
-}
-
-/* Mobile: ajustar tudo */
-@media (max-width: 600px) {
-    .monitor {
-        padding: 20px;
+      );
+      opacity: 0.28;
+      z-index: 3;
+      animation: scan 7s linear infinite;
     }
+
+    @keyframes scan {
+      0% { background-position-y: 0; }
+      100% { background-position-y: 6px; }
+    }
+
+    /* ===================== CONTAINER FULLSCREEN ===================== */
+    .screen {
+      position: relative;
+      min-height: 100vh;
+      width: 100vw;
+      padding: clamp(18px, 4vw, 40px);
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      z-index: 5;
+    }
+
+    .frame {
+      width: 100%;
+      min-height: calc(100vh - clamp(18px, 4vw, 40px) * 2);
+      border: 1px solid rgba(0,255,136,0.45);
+      background: radial-gradient(circle at top left, #050b08 0, #020403 50%, #000000 100%);
+      box-shadow:
+        0 0 24px rgba(0,0,0,0.9),
+        0 0 28px rgba(0,255,136,0.22);
+      padding: 14px 18px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    .frame-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.9);
+    }
+    .dot.red { background:#ff5f57; }
+    .dot.yellow { background:#ffbd2e; }
+    .dot.green { background:#28c840; }
+
+    .title-bar {
+      opacity: .8;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn {
+      font-family: inherit;
+      font-size: 13px;
+      padding: 2px 10px;
+      border-radius: 3px;
+      border: 1px solid rgba(0,255,136,0.7);
+      background: rgba(0,0,0,0.7);
+      color: #aefcc3;
+      cursor: pointer;
+      text-shadow: 0 0 6px rgba(0,255,136,0.9);
+      transition: transform 90ms ease-out, box-shadow 90ms ease-out, background 90ms ease-out;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 10px rgba(0,255,136,0.5);
+      background: rgba(0,0,0,0.95);
+    }
+
+    /* BODY */
+    .frame-body {
+      border-top: 1px solid rgba(0,255,136,0.3);
+      padding-top: 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 3.3fr) minmax(0, 2.7fr);
+      gap: clamp(20px, 3vw, 32px);
+      width: 100%;
+    }
+
+    @media (max-width: 980px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* TIPOGRAFIA */
+    h1, h2 {
+      font-weight: normal;
+      color: #aefcc3;
+      text-shadow: 0 0 10px rgba(0,255,136,0.9);
+    }
+
     h1 {
-        font-size: 28px;
+      font-size: clamp(30px, 4vw, 40px);
+      margin-bottom: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
     }
-}
+
+    h2.section-title {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    h2.section-title span {
+      color: rgba(160,255,210,0.9);
+    }
+
+    p {
+      font-size: 15px;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .hero-tagline {
+      max-width: 42rem;
+      margin-bottom: 12px;
+    }
+
+    .hero-meta {
+      font-size: 14px;
+      color: rgba(170,255,214,0.9);
+      margin-bottom: 10px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .pill {
+      border-radius: 14px;
+      border: 1px solid rgba(0,255,136,0.7);
+      padding: 3px 10px;
+      font-size: 13px;
+      background: rgba(0,0,0,0.6);
+      text-shadow: 0 0 5px rgba(0,255,136,0.8);
+    }
+
+    .status-line {
+      font-size: 14px;
+      margin-top: 6px;
+      color: rgba(160,255,216,0.9);
+    }
+
+    .prompt {
+      color: #00ff88;
+    }
+
+    .cursor {
+      display:inline-block;
+      width:10px;
+      animation: blink 1s steps(1,end) infinite;
+    }
+    @keyframes blink {
+      0%,49% { opacity:1; }
+      50%,100% { opacity:0; }
+    }
+
+    .muted {
+      font-size: 14px;
+      color: rgba(150,255,210,0.85);
+    }
+
+    /* PROJECTS GRID */
+    .section-caption {
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: rgba(165,255,216,0.95);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+      gap: 16px;
+      width: 100%;
+    }
+
+    .project-card {
+      border-radius: 4px;
+      border: 1px solid rgba(0,255,136,0.4);
+      background: rgba(0,15,5,0.75);
+      padding: 10px 12px;
+      text-shadow: 0 0 6px rgba(0,255,136,0.9);
+      transition: border-color 90ms ease-out, box-shadow 90ms ease-out, transform 90ms ease-out, background 90ms ease-out;
+      color: #aefcc3;
+    }
+
+    .project-card.clickable {
+      cursor: pointer;
+    }
+
+    .project-card:hover {
+      border-color: #00ff88;
+      background: rgba(0,0,0,0.95);
+      box-shadow: 0 0 12px rgba(0,255,136,0.6);
+      transform: translateY(-1px);
+    }
+
+    .project-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      margin-bottom:4px;
+    }
+
+    .project-name {
+      font-size: 16px;
+      color: #caffda;
+    }
+
+    .project-tag {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .project-desc {
+      font-size: 14px;
+    }
+
+    .project-meta {
+      font-size: 13px;
+      margin-top: 3px;
+      opacity: .95;
+    }
+
+    /* LAB / CONTACT / FOOTER */
+    .lab-note {
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .contact {
+      font-size: 14px;
+    }
+
+    .contact a {
+      color: #b9ffd7;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+    }
+
+    .contact a:hover {
+      text-shadow: 0 0 8px #00ff88;
+    }
+
+    footer {
+      margin-top: 12px;
+      text-align: right;
+      font-size: 12px;
+      opacity: .9;
+    }
+    footer span {
+      color:#00ff88;
+    }
+
+    /* ===================== BOOT SCREEN ===================== */
+    #boot-screen {
+      position: fixed;
+      inset: 0;
+      background: #020302;
+      color: #aefcc3;
+      font-family: "VT323", monospace;
+      padding: 40px 22px;
+      z-index: 999;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    #boot-inner {
+      width: 100%;
+      max-width: 720px;
+      font-size: 18px;
+      white-space: pre-line;
+    }
+
+    #boot-title {
+      margin-bottom: 10px;
+      color: #00ff88;
+      text-shadow: 0 0 10px rgba(0,255,136,0.9);
+    }
+
+    #boot-log {
+      min-height: 120px;
+    }
+
+    #boot-progress {
+      margin-top: 8px;
+      font-size: 14px;
+      color: rgba(160,255,216,0.95);
+    }
+
+    #boot-bar-wrap {
+      margin-top: 4px;
+      width: 100%;
+      height: 6px;
+      border: 1px solid rgba(0,255,136,0.7);
+      background: rgba(0,0,0,0.8);
+      box-shadow: 0 0 8px rgba(0,255,136,0.9);
+    }
+
+    #boot-bar {
+      height: 100%;
+      width: 0;
+      background: #00ff88;
+      box-shadow: 0 0 10px rgba(0,255,136,0.9);
+      transition: width 170ms linear;
+    }
+
+    body.boot-complete #boot-screen {
+      display: none;
+    }
+
+    /* ===================== GLITCH ===================== */
+    @keyframes glitch-shift {
+      0%   { transform: translate(0,0); }
+      20%  { transform: translate(-2px,1px); }
+      40%  { transform: translate(2px,-1px); }
+      60%  { transform: translate(-1px,2px); }
+      80%  { transform: translate(1px,-2px); }
+      100% { transform: translate(0,0); }
+    }
+
+    body.glitch .frame {
+      animation: glitch-shift 220ms steps(2,end) 4;
+    }
+
+    /* ===================== MOBILE AJUSTES ===================== */
+    @media (max-width: 720px) {
+      .frame {
+        padding: 12px 12px 16px;
+      }
+
+      .frame-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .title-bar {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BOOT SCREEN -->
+  <div id="boot-screen">
+    <div id="boot-inner">
+      <div id="boot-title">&gt; booting iamrocco.me _</div>
+      <div id="boot-log"></div>
+      <div id="boot-progress">
+        initializing identity core...
+        <div id="boot-bar-wrap">
+          <div id="boot-bar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div class="frame">
+      <div class="frame-header">
+        <div class="window-dots">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span the="dot green"></span>
+        </div>
+        <div class="title-bar">iamrocco.me — /home/rocco</div>
+        <div class="header-controls">
+          <button id="glitch-btn" class="btn" type="button">glitch</button>
+        </div>
+      </div>
+
+      <div class="frame-body">
+        <div class="grid">
+          <!-- COL ESQUERDA -->
+          <div>
+            <section>
+              <div class="hero-sub">identity: rocco</div>
+              <h1>&gt; iamrocco.me</h1>
+              <p class="hero-tagline">
+                criador de soluções, ideias e experiências digitais. curto transformar conceitos soltos em algo concreto,
+                funcional e com personalidade.
+              </p>
+              <p class="hero-meta">
+                não sigo nicho fixo — sigo visão, curiosidade e o que faz sentido pra quem eu sou agora.
+              </p>
+
+              <div class="pill-row">
+                <span class="pill">code + estética</span>
+                <span class="pill">interfaces &amp; interação</span>
+                <span class="pill">projetos pessoais &amp; devtools</span>
+                <span class="pill">experimentos estranhos</span>
+              </div>
+
+              <div class="status-line">
+                <span class="prompt">system&gt;</span> identity initialized<span class="cursor">_</span>
+              </div>
+            </section>
+
+            <section>
+              <h2 class="section-title">/about <span>// sobre</span></h2>
+              <p>
+                curto entender como as coisas se encaixam, desmontar, remontar e criar algo que tenha estética, propósito
+                e impacto real. às vezes isso é um sistema grande, às vezes é um protótipo estranho que só faz sentido
+                depois que existe.
+              </p>
+              <p>
+                foco em clareza, qualidade e criatividade aplicada. menos papo e mais coisa aparecendo no mundo — mesmo
+                que metade seja experimento.
+              </p>
+              <p class="muted">
+                stack favorita no momento: javascript / typescript / node.js / react e qualquer coisa que me deixe
+                brincar com comportamento, fluxo e experiência.
+              </p>
+            </section>
+          </div>
+
+          <!-- COL DIREITA -->
+          <div>
+            <section>
+              <h2 class="section-title">/projects <span>// projetos</span></h2>
+              <p class="section-caption">
+                alguns dos projetos que carregam bem a minha vibe:
+              </p>
+
+              <div class="projects-grid">
+                <a
+                  class="project-card clickable"
+                  href="https://github.com/ruidosujeira/perf-linter"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div class="project-header">
+                    <div class="project-name">Perf Fiscal</div>
+                    <div class="project-tag">devtool autoral</div>
+                  </div>
+                  <div class="project-desc">
+                    eslint plugin próprio, focado em revelar padrões problemáticos em apps reais. mistura análise
+                    de código com uma visão prática de como as pessoas realmente desenvolvem.
+                  </div>
+                  <div class="project-meta">
+                    { js / ts / node / ferramentas pra devs curiosos }
+                  </div>
+                </a>
+
+                <div class="project-card">
+                  <div class="project-header">
+                    <div class="project-name">Knob</div>
+                    <div class="project-tag">feed controlável</div>
+                  </div>
+                  <div class="project-desc">
+                    conceito de feed onde o usuário mexe em sliders pra controlar o algoritmo. explora percepção,
+                    escolha e transparência em sistemas de recomendação.
+                  </div>
+                  <div class="project-meta">
+                    interface, ranking e comportamento brincando juntos.
+                  </div>
+                </div>
+
+                <div class="project-card">
+                  <div class="project-header">
+                    <div class="project-name">Swap</div>
+                    <div class="project-tag">social experimental</div>
+                  </div>
+                  <div class="project-desc">
+                    mistura dinâmica de reels com decisão rápida estilo tinder. foco em entender como micro-escolhas
+                    definem o que continua, o que some e o que prende atenção.
+                  </div>
+                  <div class="project-meta">
+                    projeto em mutação constante — igual a internet.
+                  </div>
+                </div>
+
+                <a
+                  class="project-card clickable"
+                  href="https://github.com/ruidosujeira"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div class="project-header">
+                    <div class="project-name">mais coisas</div>
+                    <div class="project-tag">github</div>
+                  </div>
+                  <div class="project-desc">
+                    sempre tem alguma coisa nova em teste, quebrando padrão ou indo longe demais em algum detalhe.
+                  </div>
+                  <div class="project-meta">&gt; explorar repositórios</div>
+                </a>
+              </div>
+            </section>
+
+            <section>
+              <h2 class="section-title">/lab <span>// laboratório</span></h2>
+              <p>
+                espaço reservado pra experimentos, conceitos estranhos, ideias rápidas e coisas que talvez nunca virem
+                produto — mas dizem muito sobre como eu penso.
+              </p>
+              <p class="lab-note">
+                se você voltar aqui depois, provavelmente alguma coisa já vai ter quebrado alguma regra nova.
+              </p>
+            </section>
+
+            <section>
+              <h2 class="section-title">/contact <span>// contato</span></h2>
+              <p class="contact">
+                não prometo responder rápido, mas sempre leio coisas interessantes.
+              </p>
+              <p class="contact">
+                &gt; github:
+                <a href="https://github.com/ruidosujeira" target="_blank" rel="noreferrer">@ruidosujeira</a><br />
+                &gt; melhor jeito de falar sobre código: abrir uma issue bem escrita.
+              </p>
+            </section>
+
+            <footer>
+              <span>iamrocco.me</span> — identidade em movimento.
+            </footer>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // BOOT
+    (function () {
+      const lines = [
+        "loading core modules...",
+        "initializing identity kernel...",
+        "mounting /home/rocco...",
+        "scanning projects...",
+        "enabling lab environment...",
+        "starting visual layer...",
+        "ok, we're live."
+      ];
+
+      const bootLog = document.getElementById("boot-log");
+      const bootBar = document.getElementById("boot-bar");
+
+      let idx = 0;
+      function step() {
+        if (idx < lines.length) {
+          bootLog.textContent += lines[idx] + "\n";
+          const progress = ((idx + 1) / lines.length) * 100;
+          bootBar.style.width = progress + "%";
+          idx++;
+          setTimeout(step, 250);
+        } else {
+          setTimeout(() => {
+            document.body.classList.add("boot-complete");
+          }, 450);
+        }
+      }
+      step();
+    })();
+
+    // GLITCH
+    (function () {
+      const glitchBtn = document.getElementById("glitch-btn");
+      glitchBtn.addEventListener("click", () => {
+        document.body.classList.add("glitch");
+        setTimeout(() => document.body.classList.remove("glitch"), 260);
+      });
+    })();
+  </script>
+</body>
+</html>
