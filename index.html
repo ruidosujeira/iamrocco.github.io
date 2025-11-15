@@ -1,477 +1,645 @@
-      40%  { transform: translate(2px,-1px); }
-      60%  { transform: translate(-1px,2px); }
-      80%  { transform: translate(1px,-2px); }
-      100% { transform: translate(0,0); }
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rocco · Orkutfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg-page: #d9e6f7;
+      --bg-box: #ffffff;
+      --border-box: #c5d4f1;
+      --link: #295396;
+      --link-hover: #1c325e;
+      --text-main: #222222;
+      --text-muted: #777777;
+      --badge-bg: #f5f8ff;
+      --badge-border: #dde6ff;
     }
 
-    body.glitch .frame {
-      animation: glitch-shift 220ms steps(2,end) 4;
+    * {
+      box-sizing: border-box;
     }
 
-    /* ===================== MOBILE AJUSTES ===================== */
-    @media (max-width: 720px) {
-      .frame {
-        padding: 12px 12px 16px;
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Tahoma, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-main);
+    }
+
+    a {
+      color: var(--link);
+    }
+
+    a:hover {
+      color: var(--link-hover);
+    }
+
+    .orkut-page {
+      max-width: 1080px;
+      margin: 1.5rem auto;
+      display: grid;
+      grid-template-columns: 240px 1fr 260px;
+      gap: 1rem;
+      padding: 0 1rem;
+    }
+
+    .box,
+    .profile-card {
+      background: var(--bg-box);
+      border-radius: 4px;
+      border: 1px solid var(--border-box);
+      padding: 0.75rem 1rem 1rem;
+      box-shadow: 0 1px 0 #ffffff;
+    }
+
+    .profile-card {
+      text-align: center;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 4px;
+      object-fit: cover;
+      margin-bottom: 0.5rem;
+      border: 1px solid #b4c6eb;
+    }
+
+    .profile-name {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .profile-tagline {
+      margin: 0.25rem 0 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .sidebar-menu {
+      text-align: left;
+      margin-top: 0.5rem;
+      border-top: 1px solid #edf1ff;
+      padding-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .sidebar-menu a {
+      display: block;
+      padding: 2px 0;
+      text-decoration: none;
+    }
+
+    .sidebar-menu a::before {
+      content: "› ";
+      color: var(--text-muted);
+    }
+
+    .sidebar-menu a:hover {
+      text-decoration: underline;
+    }
+
+    .sidebar-meta {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: left;
+    }
+
+    .sidebar-meta strong {
+      display: inline-block;
+      min-width: 70px;
+    }
+
+    .main-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .box-title {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+      text-transform: lowercase;
+      color: var(--link-hover);
+    }
+
+    .info-table {
+      margin: 0;
+    }
+
+    .info-row {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      column-gap: 0.5rem;
+      padding: 1px 0;
+      font-size: 0.83rem;
+    }
+
+    .info-label {
+      color: var(--text-muted);
+      text-transform: lowercase;
+    }
+
+    .info-value {
+      margin: 0;
+    }
+
+    .box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .box-header-count {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.4rem;
+    }
+
+    .mini-card {
+      background: var(--badge-bg);
+      border-radius: 4px;
+      border: 1px solid var(--badge-border);
+      padding: 0.35rem 0.4rem;
+      font-size: 0.75rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mini-card a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .mini-card-title {
+      font-weight: 600;
+      display: block;
+    }
+
+    .mini-card-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .stack-icon {
+      width: 18px;
+      height: 18px;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    .scraps-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.85rem;
+    }
+
+    .scrap-item {
+      border-top: 1px solid #edf1ff;
+      padding-top: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .scrap-item:first-child {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .scrap-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .scrap-author {
+      font-weight: 600;
+      color: var(--link-hover);
+    }
+
+    .scrap-date {
+      font-style: italic;
+    }
+
+    .scrap-text {
+      margin: 0.1rem 0 0.3rem;
+      white-space: pre-wrap;
+    }
+
+    .scrap-tag {
+      display: inline-block;
+      margin-top: 0.15rem;
+      padding: 1px 4px;
+      border-radius: 3px;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .pill-link {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      text-decoration: none;
+      color: var(--link);
+    }
+
+    .pill-link:hover {
+      background: #e4ebff;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin: 0.5rem 0 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .orkut-page {
+        grid-template-columns: 1fr;
+        max-width: 100%;
       }
 
-      .frame-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
+      .right-column {
+        order: 3;
       }
 
-      .title-bar {
-        font-size: 12px;
-      <!DOCTYPE html>
-      <html lang="pt-BR">
-        <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <title>iamrocco.me</title>
-          <style>
-            /* === RESET CORE === */
-            body {
-              margin: 0;
-              padding: 0;
-              background: #000;
-              color: #9efca9;
-              font-family: "Courier New", monospace;
-              overflow-x: hidden;
-            }
+      .sidebar {
+        order: 1;
+      }
 
-            /* Remover qualquer filtro que deixa tons azuis/roxos */
-            * {
-              filter: none !important;
-            }
+      .main-column {
+        order: 2;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="orkut-page">
+    <!-- COLUNA ESQUERDA -->
+    <aside class="sidebar">
+      <div class="profile-card">
+        <img
+          id="avatar"
+          class="profile-avatar"
+          src=""
+          alt="Foto de perfil"
+        />
+        <h1 class="profile-name" id="profile-name">Rocco</h1>
+        <p class="profile-tagline" id="profile-tagline">
+          desenvolvedor open-source & criador de ferramentas esquisitamente úteis
+        </p>
 
-            /* === CRT EFFECT === */
-            body::after {
-              content: "";
-              position: fixed;
-              inset: 0;
-              pointer-events: none;
-              background: repeating-linear-gradient(
-                rgba(0,255,100,0.06) 0px,
-                rgba(0,255,100,0.06) 2px,
-                transparent 3px
-              );
-              opacity: 0.25;
-              z-index: 10;
-            }
+        <nav class="sidebar-menu">
+          <a href="#perfil">perfil</a>
+          <a href="#recados">recados (blog)</a>
+          <a href="#projetos">projetos</a>
+          <a href="#contato">contato</a>
+        </nav>
 
-            /* FULLSCREEN CONTAINER */
-            .monitor {
-              width: 100vw;
-              min-height: 100vh;
-              padding: clamp(20px, 4vw, 60px);
-              box-sizing: border-box;
-            }
-
-            /* GRID PRINCIPAL */
-            .main-grid {
-              display: grid;
-              grid-template-columns: minmax(0, 3.3fr) minmax(0, 2.7fr);
-              gap: clamp(24px, 3vw, 36px);
-            }
-
-            @media (max-width: 900px) {
-              .main-grid {
-                grid-template-columns: 1fr;
-              }
-            }
-
-            /* GRID PROJETOS */
-            .projects-grid {
-              display: grid;
-              gap: clamp(16px, 2vw, 28px);
-              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            }
-
-            /* CARD */
-            .card {
-              color: #9efca9 !important;
-              border: 1px solid rgba(0,255,150,0.35);
-              background: rgba(0, 20, 0, 0.25);
-              padding: 16px 20px;
-              border-radius: 4px;
-              text-shadow: 0 0 6px #39ff6f !important;
-            }
-
-            :root {
-              color-scheme: dark;
-            }
-
-            html {
-              background: #000;
-            }
-
-            body {
-              min-height: 100vh;
-              line-height: 1.6;
-              text-shadow: 0 0 6px #39ff6f;
-            }
-
-            .monitor {
-              display: flex;
-              justify-content: center;
-              align-items: flex-start;
-            }
-
-            .content {
-              width: 100%;
-              max-width: 1320px;
-              margin: 0 auto;
-              display: flex;
-              flex-direction: column;
-              gap: clamp(24px, 4vw, 48px);
-              position: relative;
-              z-index: 1;
-            }
-
-            h1,
-            h2,
-            h3,
-            p,
-            span,
-            li {
-              color: #9efca9;
-              text-shadow: 0 0 6px #39ff6f;
-            }
-
-            h1 {
-              font-size: clamp(32px, 4vw, 48px);
-              letter-spacing: 0.08em;
-              text-transform: uppercase;
-              margin-bottom: 8px;
-            }
-
-            h2 {
-              font-size: clamp(18px, 2vw, 24px);
-              text-transform: uppercase;
-              letter-spacing: 0.12em;
-              margin-bottom: 12px;
-            }
-
-            h3 {
-              margin: 0 0 4px;
-              font-size: 18px;
-            }
-
-            p {
-              margin: 0 0 8px;
-              font-size: 15px;
-            }
-
-            .section-shell {
-              border: 1px solid rgba(0,255,120,0.35);
-              background: rgba(0, 10, 0, 0.6);
-              padding: clamp(18px, 2.5vw, 28px);
-              border-radius: 6px;
-              box-shadow: 0 0 18px rgba(0,255,110,0.18);
-            }
-
-            .about-section {
-              display: flex;
-              flex-direction: column;
-              gap: 12px;
-            }
-
-            .identity-label {
-              text-transform: uppercase;
-              font-size: 14px;
-              letter-spacing: 0.2em;
-            }
-
-            .identity-callout {
-              font-size: 20px;
-              letter-spacing: 0.16em;
-            }
-
-            blockquote {
-              margin: 0;
-              padding-left: 16px;
-              border-left: 2px solid rgba(0,255,110,0.4);
-              font-style: italic;
-            }
-
-            .pill-row {
-              display: flex;
-              flex-wrap: wrap;
-              gap: 8px;
-            }
-
-            .pill {
-              border: 1px solid rgba(0,255,130,0.5);
-              border-radius: 999px;
-              padding: 4px 14px;
-              font-size: 13px;
-              letter-spacing: 0.04em;
-              background: rgba(0, 30, 0, 0.4);
-            }
-
-            .system-line {
-              font-size: 14px;
-              letter-spacing: 0.1em;
-            }
-
-            .right-stack {
-              display: flex;
-              flex-direction: column;
-              gap: clamp(18px, 2vw, 28px);
-            }
-
-            .section-title {
-              margin-bottom: 16px;
-            }
-
-            .card h3 {
-              text-transform: uppercase;
-              letter-spacing: 0.1em;
-            }
-
-            .card small {
-              display: block;
-              font-size: 12px;
-              letter-spacing: 0.14em;
-              margin-bottom: 8px;
-              text-transform: uppercase;
-            }
-
-            .card-meta {
-              font-size: 13px;
-              margin-top: 12px;
-              word-break: break-word;
-            }
-
-            .card-links {
-              margin-top: 10px;
-              padding-left: 20px;
-            }
-
-            .card-links li {
-              margin-bottom: 6px;
-            }
-
-            .lab,
-            .contact {
-              font-size: 15px;
-            }
-
-            a {
-              color: #9efca9;
-              text-decoration: none;
-              border-bottom: 1px dotted rgba(0,255,110,0.4);
-              padding-bottom: 2px;
-            }
-
-            a:hover {
-              border-bottom-color: rgba(0,255,110,0.8);
-            }
-          </style>
-        </head>
-        <body>
-          <div class="monitor">
-            <div class="content">
-              <div class="main-grid">
-                <section class="section-shell about-section">
-                  <p class="identity-label">identity: rocco</p>
-                  <blockquote>
-                    <p class="identity-callout">&gt; IAMROCCO.ME</p>
-                  </blockquote>
-                  <h1>criador em modo crt</h1>
-                  <p>
-                    criador de soluções, ideias e experiências digitais. curto transformar conceitos soltos em algo concreto, funcional e com
-                    personalidade.
-                  </p>
-                  <p>
-                    não sigo nicho fixo — sigo visão, curiosidade e o que faz sentido pra quem eu sou agora.
-                  </p>
-                  <div class="pill-row">
-                    <span class="pill">code + estética</span>
-                    <span class="pill">interfaces + interação</span>
-                    <span class="pill">projetos pessoais + devtools</span>
-                    <span class="pill">experimentos estranhos</span>
-                  </div>
-                  <p class="system-line">system&gt; identity initialized_</p>
-                </section>
-
-                <div class="right-stack">
-                  <section class="section-shell">
-                    <h2 class="section-title">projects</h2>
-                    <div class="projects-grid">
-                      <article class="card">
-                        <h3>Perf Fiscal</h3>
-                        <small>devtool autoral</small>
-                        <p>
-                          eslint plugin próprio focado em revelar padrões problemáticos em apps reais. mistura análise de código com visão prática de como
-                          as pessoas realmente desenvolvem.
-                        </p>
-                        <p class="card-meta">meta: { js / ts / node / ferramentas pra devs curiosos }</p>
-                      </article>
-
-                      <article class="card">
-                        <h3>Knob</h3>
-                        <small>feed controlável</small>
-                        <p>
-                          conceito de feed onde o usuário controla o algoritmo com sliders. foca em percepção, escolha e transparência em sistemas de
-                          recomendação.
-                        </p>
-                      </article>
-
-                      <article class="card">
-                        <h3>Swap</h3>
-                        <small>social experimental</small>
-                        <p>
-                          mistura dinâmica de reels com decisão rápida estilo tinder. foco em micro-escolhas que definem o que continua, o que some e o que
-                          prende atenção.
-                        </p>
-                      </article>
-
-                      <article class="card">
-                        <h3>Mais coisas</h3>
-                        <small>github</small>
-                        <p>links:</p>
-                        <ul class="card-links">
-                          <li>sempre tem algo novo em teste</li>
-                          <li>quebrando padrão ou indo longe demais</li>
-                          <li>explorar repositórios</li>
-                        </ul>
-                      </article>
-                    </div>
-                  </section>
-
-                  <section class="section-shell">
-                    <h2 class="section-title">lab</h2>
-                    <p class="lab">
-                      espaço reservado pra experimentos, conceitos estranhos, ideias rápidas e coisas que talvez nunca virem produto — mas dizem muito sobre
-                      como eu penso.
-                    </p>
-                  </section>
-
-                  <section class="section-shell">
-                    <h2 class="section-title">contact</h2>
-                    <p class="contact">
-                      github: <a href="https://github.com/ruidosujeira" target="_blank" rel="noopener noreferrer">@ruidosujeira</a><br />
-                      melhor jeito de falar sobre código: abrir uma issue bem escrita.
-                    </p>
-                  </section>
-                </div>
-              </div>
-            </div>
-          </div>
-        </body>
-      </html>
-                  </div>
-                  <div class="project-meta">
-                    interface, ranking e comportamento brincando juntos.
-                  </div>
-                </div>
-
-                <div class="project-card">
-                  <div class="project-header">
-                    <div class="project-name">Swap</div>
-                    <div class="project-tag">social experimental</div>
-                  </div>
-                  <div class="project-desc">
-                    mistura dinâmica de reels com decisão rápida estilo tinder. foco em entender como micro-escolhas
-                    definem o que continua, o que some e o que prende atenção.
-                  </div>
-                  <div class="project-meta">
-                    projeto em mutação constante — igual a internet.
-                  </div>
-                </div>
-
-                <a
-                  class="project-card clickable"
-                  href="https://github.com/ruidosujeira"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <div class="project-header">
-                    <div class="project-name">mais coisas</div>
-                    <div class="project-tag">github</div>
-                  </div>
-                  <div class="project-desc">
-                    sempre tem alguma coisa nova em teste, quebrando padrão ou indo longe demais em algum detalhe.
-                  </div>
-                  <div class="project-meta">&gt; explorar repositórios</div>
-                </a>
-              </div>
-            </section>
-
-            <section>
-              <h2 class="section-title">/lab <span>// laboratório</span></h2>
-              <p>
-                espaço reservado pra experimentos, conceitos estranhos, ideias rápidas e coisas que talvez nunca virem
-                produto — mas dizem muito sobre como eu penso.
-              </p>
-              <p class="lab-note">
-                se você voltar aqui depois, provavelmente alguma coisa já vai ter quebrado alguma regra nova.
-              </p>
-            </section>
-
-            <section>
-              <h2 class="section-title">/contact <span>// contato</span></h2>
-              <p class="contact">
-                não prometo responder rápido, mas sempre leio coisas interessantes.
-              </p>
-              <p class="contact">
-                &gt; github:
-                <a href="https://github.com/ruidosujeira" target="_blank" rel="noreferrer">@ruidosujeira</a><br />
-                &gt; melhor jeito de falar sobre código: abrir uma issue bem escrita.
-              </p>
-            </section>
-
-            <footer>
-              <span>iamrocco.me</span> — identidade em movimento.
-            </footer>
-          </div>
+        <div class="sidebar-meta">
+          <div><strong>github:</strong> <span id="github-handle">@ruidosujeira</span></div>
+          <div><strong>stack:</strong> ts, react, node, perf</div>
+          <div><strong>vibe:</strong> open-source, debug e caos controlado</div>
         </div>
       </div>
-    </div>
+    </aside>
+
+    <!-- COLUNA DO MEIO -->
+    <main class="main-column">
+      <!-- PERFIL / SOCIAL -->
+      <section id="perfil" class="box">
+        <h2 class="box-title">social</h2>
+        <div class="info-table" id="info-table">
+          <!-- preenchido via JS -->
+        </div>
+      </section>
+
+      <!-- RECADOS / BLOG -->
+      <section id="recados" class="box">
+        <h2 class="box-title">recados / dev-log</h2>
+        <ul class="scraps-list" id="scraps-list">
+          <!-- preenchido via JS -->
+        </ul>
+      </section>
+    </main>
+
+    <!-- COLUNA DIREITA -->
+    <aside class="right-column">
+      <!-- PROJETOS (amigos) -->
+      <section id="projetos" class="box">
+        <div class="box-header">
+          <h2 class="box-title">projetos (amigos)</h2>
+          <span class="box-header-count" id="projects-count"></span>
+        </div>
+        <div class="mini-grid" id="projects-grid">
+          <!-- preenchido via JS -->
+        </div>
+      </section>
+
+      <!-- STACKS (comunidades) -->
+      <section class="box">
+        <div class="box-header">
+          <h2 class="box-title">stacks (comunidades)</h2>
+          <span class="box-header-count" id="stacks-count"></span>
+        </div>
+        <div class="mini-grid" id="stacks-grid">
+          <!-- preenchido via JS -->
+        </div>
+      </section>
+
+      <!-- CONTATO -->
+      <section id="contato" class="box">
+        <h2 class="box-title">contato</h2>
+        <p style="font-size:0.8rem;margin:0 0 0.4rem;">
+          Quer trocar ideia, colaborar em projeto ou chamar pra resolver um bug impossível?
+        </p>
+        <div class="contact-links">
+          <a class="pill-link" id="github-link" href="#" target="_blank" rel="noreferrer"
+            >GitHub</a
+          >
+          <a
+            class="pill-link"
+            href="mailto:seu.email+rocco@exemplo.com"
+            target="_blank"
+            rel="noreferrer"
+            >Email</a
+          >
+          <a
+            class="pill-link"
+            href="https://instagram.com/ruidosujeira"
+            target="_blank"
+            rel="noreferrer"
+            >Instagram</a
+          >
+        </div>
+      </section>
+    </aside>
   </div>
 
+  <p class="footer-note">
+    Orkutfolio feito em HTML, CSS e JS puro. Sinta-se em 2007, mas com stack de hoje.
+  </p>
+
   <script>
-    // BOOT
-    (function () {
-      const lines = [
-        "loading core modules...",
-        "initializing identity kernel...",
-        "mounting /home/rocco...",
-        "scanning projects...",
-        "enabling lab environment...",
-        "starting visual layer...",
-        "ok, we're live."
-      ];
+    // ================== CONFIG EDITÁVEL ==================
+    const GITHUB_USERNAME = "ruidosujeira";
+    const DISPLAY_NAME = "Rocco";
+    const TAGLINE =
+      "desenvolvedor open-source & criador do Perf Fiscal (eslint-plugin-perf-fiscal)";
 
-      const bootLog = document.getElementById("boot-log");
-      const bootBar = document.getElementById("boot-bar");
+    const socialInfo = [
+      { label: "ocupação", value: "dev open-source / creator" },
+      {
+        label: "interesses",
+        value:
+          "performance de front-end, análise estática, redes sociais transparentes, open-source",
+      },
+      {
+        label: "quem sou eu",
+        value:
+          "curioso demais, escrevo mais código do que posts, e vivo tentando medir coisas que ninguém mede.",
+      },
+      { label: "cidade", value: "Brasil" },
+      { label: "estilo", value: "caos organizado, dark mode e terminal aberto" },
+      { label: "linguagens", value: "TypeScript, JavaScript, um pouco de tudo" },
+      { label: "status", value: "sempre em beta, mas deployando assim mesmo" },
+    ];
 
-      let idx = 0;
-      function step() {
-        if (idx < lines.length) {
-          bootLog.textContent += lines[idx] + "\n";
-          const progress = ((idx + 1) / lines.length) * 100;
-          bootBar.style.width = progress + "%";
-          idx++;
-          setTimeout(step, 250);
-        } else {
-          setTimeout(() => {
-            document.body.classList.add("boot-complete");
-          }, 450);
-        }
+    // mini dev-log
+    const scraps = [
+      {
+        author: "Rocco",
+        date: "15/11/2025",
+        text:
+          "Brincando com o Perf Fiscal em um monorepo gigante.\nAchei uns padrões bizarros de re-render e já virei regra nova do linter.",
+        tag: "perf-fiscal",
+      },
+      {
+        author: "Rocco",
+        date: "14/11/2025",
+        text:
+          "Esbocei a ideia de um portfólio estilo Orkut. Se você está lendo isso, significa que virou código.",
+        tag: "meta",
+      },
+      {
+        author: "Rocco",
+        date: "13/11/2025",
+        text:
+          "Anotei uma lista de redes sociais que eu ainda quero clonar em versão open-source, mostrando o algoritmo por trás.",
+        tag: "ideias",
+      },
+    ];
+
+    // projetos principais
+    const projects = [
+      {
+        name: "Perf Fiscal",
+        url: "https://github.com/ruidosujeira/perf-linter",
+        desc: "eslint plugin focado em performance real para React/TS, com análise cross-file.",
+      },
+      {
+        name: "Swap",
+        url: "https://github.com/ruidosujeira",
+        desc: "experimento de feed tipo Tinder para conteúdo, moldado por likes/dislikes.",
+      },
+      {
+        name: "Knob",
+        url: "https://github.com/ruidosujeira",
+        desc: "controle do algoritmo com sliders: feed ajustável pelo próprio usuário.",
+      },
+      {
+        name: "Labs & snippets",
+        url: "https://github.com/ruidosujeira?tab=repositories",
+        desc: "coleção de pequenos projetos, testes e ideias estranhas.",
+      },
+    ];
+
+    // stacks usadas (pode trocar ícones/nomes à vontade)
+    const stacks = [
+      {
+        name: "TypeScript",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+      },
+      {
+        name: "React",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+      },
+      {
+        name: "Node.js",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+      },
+      {
+        name: "PostgreSQL",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
+      },
+      {
+        name: "Docker",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
+      },
+      {
+        name: "GitHub Actions",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+      },
+    ];
+
+    // ================== RENDERIZAÇÃO ==================
+
+    // avatar + textos básicos
+    document.getElementById(
+      "avatar"
+    ).src = `https://github.com/${GITHUB_USERNAME}.png`;
+    document.getElementById("profile-name").textContent = DISPLAY_NAME;
+    document.getElementById("profile-tagline").textContent = TAGLINE;
+    document.getElementById(
+      "github-handle"
+    ).textContent = `@${GITHUB_USERNAME}`;
+    document
+      .getElementById("github-link")
+      .setAttribute("href", `https://github.com/${GITHUB_USERNAME}`);
+
+    // tabela social
+    const infoTableEl = document.getElementById("info-table");
+    socialInfo.forEach((item) => {
+      const row = document.createElement("div");
+      row.className = "info-row";
+
+      const label = document.createElement("div");
+      label.className = "info-label";
+      label.textContent = item.label;
+
+      const value = document.createElement("div");
+      value.className = "info-value";
+      value.textContent = item.value;
+
+      row.appendChild(label);
+      row.appendChild(value);
+      infoTableEl.appendChild(row);
+    });
+
+    // recados
+    const scrapsListEl = document.getElementById("scraps-list");
+    scraps.forEach((scrap) => {
+      const li = document.createElement("li");
+      li.className = "scrap-item";
+
+      const meta = document.createElement("div");
+      meta.className = "scrap-meta";
+
+      const author = document.createElement("span");
+      author.className = "scrap-author";
+      author.textContent = scrap.author;
+
+      const date = document.createElement("span");
+      date.className = "scrap-date";
+      date.textContent = scrap.date;
+
+      meta.appendChild(author);
+      meta.appendChild(date);
+
+      const text = document.createElement("p");
+      text.className = "scrap-text";
+      text.textContent = scrap.text;
+
+      li.appendChild(meta);
+      li.appendChild(text);
+
+      if (scrap.tag) {
+        const tag = document.createElement("span");
+        tag.className = "scrap-tag";
+        tag.textContent = scrap.tag;
+        li.appendChild(tag);
       }
-      step();
-    })();
 
-    // GLITCH
-    (function () {
-      const glitchBtn = document.getElementById("glitch-btn");
-      glitchBtn.addEventListener("click", () => {
-        document.body.classList.add("glitch");
-        setTimeout(() => document.body.classList.remove("glitch"), 260);
-      });
-    })();
+      scrapsListEl.appendChild(li);
+    });
+
+    // projetos
+    const projectsGridEl = document.getElementById("projects-grid");
+    document.getElementById(
+      "projects-count"
+    ).textContent = `${projects.length} projetos`;
+    projects.forEach((proj) => {
+      const card = document.createElement("div");
+      card.className = "mini-card";
+
+      const link = document.createElement("a");
+      link.href = proj.url;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+
+      const title = document.createElement("span");
+      title.className = "mini-card-title";
+      title.textContent = proj.name;
+
+      const sub = document.createElement("span");
+      sub.className = "mini-card-sub";
+      sub.textContent = proj.desc;
+
+      link.appendChild(title);
+      link.appendChild(sub);
+      card.appendChild(link);
+      projectsGridEl.appendChild(card);
+    });
+
+    // stacks
+    const stacksGridEl = document.getElementById("stacks-grid");
+    document.getElementById(
+      "stacks-count"
+    ).textContent = `${stacks.length} stacks`;
+    stacks.forEach((stack) => {
+      const card = document.createElement("div");
+      card.className = "mini-card";
+
+      const span = document.createElement("span");
+
+      if (stack.icon) {
+        const img = document.createElement("img");
+        img.src = stack.icon;
+        img.alt = stack.name;
+        img.className = "stack-icon";
+        span.appendChild(img);
+      }
+
+      const text = document.createElement("span");
+      text.textContent = stack.name;
+
+      span.appendChild(text);
+      card.appendChild(span);
+      stacksGridEl.appendChild(card);
+    });
   </script>
 </body>
 </html>
