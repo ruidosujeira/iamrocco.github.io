@@ -1,34 +1,608 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <title>Rocco</title>
+    <title>iamrocco.me</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Fonte pixel/terminal -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-      body {
-        background: #0a0a0a;
-        color: #00ff88;
-        font-family: monospace;
-        text-align: center;
-        padding-top: 120px;
+      :root {
+        --bg: #050607;
+        --bg-soft: #070a10;
+        --green: #00ff88;
+        --green-soft: #7af7c8;
+        --green-dark: #008851;
+        --accent: #9d4dff;
+        --danger: #ff3860;
       }
-      .scanline {
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        background: radial-gradient(circle at top, #151a2a 0, var(--bg) 55%);
+        color: var(--green-soft);
+        font-family: "VT323", monospace;
+        font-size: 18px;
+        text-shadow: 0 0 4px rgba(0, 255, 136, 0.5);
+        overflow-x: hidden;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .crt {
+        position: relative;
+        min-height: 100vh;
+        padding: 32px 12px 48px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .crt::before {
+        content: "";
         position: fixed;
         inset: 0;
         pointer-events: none;
         background: repeating-linear-gradient(
           to bottom,
-          rgba(0, 0, 0, 0.25) 0px,
-          rgba(0, 0, 0, 0.25) 1px,
+          rgba(0, 0, 0, 0.4) 0px,
+          rgba(0, 0, 0, 0.4) 1px,
           transparent 1px,
           transparent 3px
         );
-        mix-blend-mode: overlay;
+        opacity: 0.28;
+        mix-blend-mode: soft-light;
+        z-index: 20;
+      }
+
+      .crt::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(
+          circle at center,
+          transparent 0,
+          transparent 55%,
+          rgba(0, 0, 0, 0.9) 100%
+        );
+        opacity: 0.8;
+        z-index: 19;
+      }
+
+      .frame {
+        position: relative;
+        width: 100%;
+        max-width: 980px;
+        border: 1px solid rgba(0, 255, 136, 0.4);
+        background: linear-gradient(
+          135deg,
+          rgba(0, 0, 0, 0.9),
+          rgba(5, 10, 15, 0.98)
+        );
+        padding: 16px 18px 26px;
+        z-index: 1;
+        box-shadow:
+          0 0 20px rgba(0, 0, 0, 0.8),
+          0 0 24px rgba(0, 255, 136, 0.12);
+      }
+
+      .frame-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .window-dots {
+        display: flex;
+        gap: 6px;
+      }
+
+      .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.8);
+      }
+
+      .dot.red {
+        background: #ff5f57;
+      }
+
+      .dot.yellow {
+        background: #ffbd2e;
+      }
+
+      .dot.green {
+        background: #28c840;
+      }
+
+      .title-bar {
+        font-size: 16px;
+        color: var(--green-soft);
+        opacity: 0.8;
+      }
+
+      .frame-body {
+        border-top: 1px solid rgba(0, 255, 136, 0.3);
+        padding-top: 12px;
+      }
+
+      /* NAVBAR */
+
+      .nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 20px;
+        font-size: 16px;
+      }
+
+      .nav span {
+        color: var(--green-soft);
+        opacity: 0.7;
+      }
+
+      .nav a {
+        padding: 2px 8px;
+        border-radius: 3px;
+        border: 1px solid transparent;
+        transition:
+          border-color 90ms ease-out,
+          background 90ms ease-out,
+          color 90ms ease-out,
+          transform 90ms ease-out;
+      }
+
+      .nav a:hover {
+        border-color: var(--green-dark);
+        background: rgba(0, 255, 136, 0.06);
+        color: var(--green);
+        transform: translateY(-1px);
+      }
+
+      .nav a.active {
+        border-color: var(--green);
+        background: rgba(0, 255, 136, 0.09);
+        color: var(--green);
+      }
+
+      /* LAYOUT */
+
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr);
+        gap: 32px;
+      }
+
+      @media (min-width: 880px) {
+        .grid {
+          grid-template-columns: minmax(0, 3.5fr) minmax(0, 2.5fr);
+        }
+      }
+
+      section {
+        margin-bottom: 26px;
+      }
+
+      h1,
+      h2 {
+        font-weight: normal;
+      }
+
+      h1 {
+        font-size: 40px;
+        color: var(--green);
+        margin-bottom: 8px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .hero-sub {
+        font-size: 16px;
+        color: var(--green-soft);
+        margin-bottom: 10px;
+      }
+
+      .hero-tagline {
+        font-size: 15px;
+        color: rgba(192, 255, 227, 0.9);
+        margin-bottom: 18px;
+        max-width: 38rem;
+      }
+
+      .hero-meta {
+        font-size: 14px;
+        color: rgba(140, 255, 204, 0.7);
+      }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .pill {
+        border-radius: 14px;
+        border: 1px solid rgba(0, 255, 136, 0.4);
+        padding: 3px 10px;
+        font-size: 13px;
+        background: rgba(0, 0, 0, 0.45);
+      }
+
+      .section-title {
+        font-size: 18px;
+        margin-bottom: 6px;
+        color: var(--green);
+      }
+
+      .section-title span {
+        color: rgba(140, 255, 204, 0.8);
+      }
+
+      .section-caption {
+        font-size: 14px;
+        color: rgba(166, 255, 220, 0.8);
+        margin-bottom: 10px;
+      }
+
+      p {
+        line-height: 1.4;
+        margin-bottom: 8px;
+      }
+
+      .muted {
+        color: rgba(140, 255, 204, 0.7);
+      }
+
+      .project-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .project-card {
+        border: 1px solid rgba(0, 255, 136, 0.3);
+        background: rgba(0, 0, 0, 0.65);
+        padding: 10px 12px;
+        border-radius: 3px;
+        transition:
+          border-color 90ms ease-out,
+          background 90ms ease-out,
+          transform 90ms ease-out,
+          box-shadow 90ms ease-out;
+        cursor: default;
+      }
+
+      .project-card.clickable {
+        cursor: pointer;
+      }
+
+      .project-card:hover {
+        border-color: var(--green);
+        background: rgba(0, 0, 0, 0.9);
+        transform: translateY(-1px);
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.15);
+      }
+
+      .project-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
+
+      .project-name {
+        font-size: 16px;
+        color: var(--green);
+      }
+
+      .project-tag {
+        font-size: 12px;
+        color: rgba(140, 255, 204, 0.8);
+      }
+
+      .project-desc {
+        font-size: 14px;
+        color: rgba(188, 255, 231, 0.9);
+      }
+
+      .project-meta {
+        margin-top: 4px;
+        font-size: 13px;
+        color: rgba(144, 255, 210, 0.7);
+      }
+
+      .lab-note {
+        font-size: 14px;
+        color: rgba(197, 255, 236, 0.9);
+        margin-top: 4px;
+      }
+
+      .contact {
+        font-size: 14px;
+      }
+
+      .contact a {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+      }
+
+      .status-line {
+        margin-top: 10px;
+        font-size: 13px;
+        color: rgba(120, 255, 199, 0.7);
+      }
+
+      .prompt {
+        color: var(--green);
+      }
+
+      .cursor {
+        display: inline-block;
+        width: 10px;
+        animation: blink 1.1s steps(1, end) infinite;
+      }
+
+      @keyframes blink {
+        0%,
+        49% {
+          opacity: 1;
+        }
+        50%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      /* pequena micro-animação no load */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(4px);
+        animation: fade 0.4s ease-out forwards;
+      }
+
+      .fade-in.delayed {
+        animation-delay: 0.2s;
+      }
+
+      @keyframes fade {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      footer {
+        margin-top: 10px;
+        font-size: 12px;
+        color: rgba(144, 255, 210, 0.6);
+        text-align: right;
+      }
+
+      footer span {
+        color: var(--green);
       }
     </style>
   </head>
   <body>
-    <h1>> iamrocco.me</h1>
-    <p>identity initialized_</p>
-    <div class="scanline"></div>
+    <div class="crt">
+      <div class="frame">
+        <div class="frame-header">
+          <div class="window-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <div class="title-bar">iamrocco.me — /home/rocco</div>
+          <div style="width: 44px"></div>
+        </div>
+
+        <div class="frame-body">
+          <!-- NAV -->
+          <nav class="nav">
+            <span>&gt;</span>
+            <a href="#top" class="active">home</a>
+            <a href="#about">about</a>
+            <a href="#projects">projects</a>
+            <a href="#lab">lab</a>
+            <a href="#contact">contact</a>
+          </nav>
+
+          <div class="grid" id="top">
+            <!-- COL ESQUERDA -->
+            <div>
+              <!-- HERO -->
+              <section class="fade-in">
+                <div class="hero-sub">identity: <span>rocco</span></div>
+                <h1>&gt; iamrocco.me</h1>
+                <p class="hero-tagline">
+                  criador de soluções, ideias e experiências digitais. gosto de
+                  transformar conceitos soltos em algo concreto, funcional e com
+                  personalidade.
+                </p>
+                <p class="hero-meta">
+                  não sigo nicho fixo — sigo visão, curiosidade e o que faz
+                  sentido pra quem eu sou agora.
+                </p>
+
+                <div class="pill-row">
+                  <span class="pill">code + estética</span>
+                  <span class="pill">interfaces &amp; interação</span>
+                  <span class="pill">projetos pessoais &amp; devtools</span>
+                  <span class="pill">experimentos estranhos</span>
+                </div>
+
+                <div class="status-line">
+                  <span class="prompt">system&gt;</span>
+                  identity initialized<span class="cursor">_</span>
+                </div>
+              </section>
+
+              <!-- ABOUT -->
+              <section id="about" class="fade-in delayed">
+                <h2 class="section-title">/about <span>// sobre</span></h2>
+                <p>
+                  curto entender como as coisas se encaixam, desmontar, remontar
+                  e criar algo que tenha estética, propósito e impacto real.
+                  isso pode ser um sistema grande, um protótipo rápido ou um
+                  experimento que só faz sentido depois que fica pronto.
+                </p>
+                <p>
+                  o objetivo é sempre o mesmo: clareza, qualidade e criatividade
+                  aplicada. menos papo, mais coisa existindo no mundo.
+                </p>
+                <p class="muted">
+                  stack favorita no momento: javascript / typescript, node.js,
+                  react e qualquer coisa que me deixe brincar com comportamento,
+                  fluxo e experiência.
+                </p>
+              </section>
+            </div>
+
+            <!-- COL DIREITA -->
+            <div>
+              <!-- PROJECTS -->
+              <section id="projects" class="fade-in delayed">
+                <h2 class="section-title">/projects <span>// projetos</span></h2>
+                <p class="section-caption">
+                  alguns dos projetos que carregam bem a minha vibe:
+                </p>
+
+                <div class="project-list">
+                  <a
+                    class="project-card clickable"
+                    href="https://github.com/ruidosujeira/perf-linter"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <div class="project-header">
+                      <div class="project-name">Perf Fiscal</div>
+                      <div class="project-tag">devtool autoral</div>
+                    </div>
+                    <p class="project-desc">
+                      eslint plugin próprio, focado em revelar padrões
+                      problemáticos em apps reais. mistura análise de código com
+                      uma visão prática de como as pessoas realmente
+                      desenvolvem.
+                    </p>
+                    <div class="project-meta">
+                      { js / ts / node / ferramentas pra devs curiosos }
+                    </div>
+                  </a>
+
+                  <div class="project-card">
+                    <div class="project-header">
+                      <div class="project-name">Knob</div>
+                      <div class="project-tag">feed controlável</div>
+                    </div>
+                    <p class="project-desc">
+                      conceito de feed onde o usuário mexe em sliders pra
+                      controlar o algoritmo. explora percepção, escolha e
+                      transparência em sistemas de recomendação.
+                    </p>
+                    <div class="project-meta">
+                      experimento em cima de: interface, ranking, comportamento.
+                    </div>
+                  </div>
+
+                  <div class="project-card">
+                    <div class="project-header">
+                      <div class="project-name">Swap</div>
+                      <div class="project-tag">social experimental</div>
+                    </div>
+                    <p class="project-desc">
+                      ideia que mistura dinâmica de reels com decisão rápida
+                      estilo tinder. foco em entender como micro-escolhas
+                      definem o que continua, o que some e o que prende atenção.
+                    </p>
+                    <div class="project-meta">
+                      projeto em mutação constante — como a internet.
+                    </div>
+                  </div>
+
+                  <a
+                    class="project-card clickable"
+                    href="https://github.com/ruidosujeira"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <div class="project-header">
+                      <div class="project-name">mais coisas</div>
+                      <div class="project-tag">github</div>
+                    </div>
+                    <p class="project-desc">
+                      tem sempre alguma coisa nova em teste, quebrando padrão ou
+                      indo longe demais num detalhe.
+                    </p>
+                    <div class="project-meta">
+                      &gt; explorar repositórios
+                    </div>
+                  </a>
+                </div>
+              </section>
+
+              <!-- LAB -->
+              <section id="lab" class="fade-in delayed">
+                <h2 class="section-title">/lab <span>// laboratório</span></h2>
+                <p>
+                  espaço reservado pra experimentos, conceitos estranhos, ideias
+                  rápidas e coisas que talvez nunca virem produto — mas dizem
+                  muito sobre como eu penso.
+                </p>
+                <p class="lab-note">
+                  ainda em construção. provavelmente quando você voltar aqui já
+                  vai ter algo novo quebrando alguma regra.
+                </p>
+              </section>
+
+              <!-- CONTACT -->
+              <section id="contact" class="fade-in delayed">
+                <h2 class="section-title">
+                  /contact <span>// contato</span>
+                </h2>
+                <p class="contact">
+                  não prometo responder rápido, mas sempre leio coisas
+                  interessantes.
+                </p>
+                <p class="contact">
+                  &gt; github:
+                  <a
+                    href="https://github.com/ruidosujeira"
+                    target="_blank"
+                    rel="noreferrer"
+                    >@ruidosujeira</a
+                  >
+                  <br />
+                  &gt; melhor jeito de falar sobre código: abrir uma issue bem
+                  escrita.
+                </p>
+              </section>
+
+              <footer>
+                <span>iamrocco.me</span> — identidade em movimento.
+              </footer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
