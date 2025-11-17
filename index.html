@@ -2,654 +2,253 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Rocco · Orkutfolio</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Céu para Antonia</title>
   <style>
-    :root {
-      --bg-page: #d9e6f7;
-      --bg-box: #ffffff;
-      --border-box: #c5d4f1;
-      --link: #295396;
-      --link-hover: #1c325e;
-      --text-main: #222222;
-      --text-muted: #777777;
-      --badge-bg: #f5f8ff;
-      --badge-border: #dde6ff;
-      --row-alt: #edf3ff;
-    }
-
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
 
     body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Tahoma, sans-serif;
-      background: var(--bg-page);
-      color: var(--text-main);
-    }
-
-    a {
-      color: var(--link);
-    }
-
-    a:hover {
-      color: var(--link-hover);
-    }
-
-    .orkut-page {
-      max-width: 1080px;
-      margin: 1.5rem auto;
-      display: grid;
-      grid-template-columns: 240px 1fr 260px;
-      gap: 1rem;
-      padding: 0 1rem;
-    }
-
-    .box,
-    .profile-card {
-      background: var(--bg-box);
-      border-radius: 4px;
-      border: 1px solid var(--border-box);
-      padding: 0.75rem 1rem 1rem;
-      box-shadow: 0 1px 0 #ffffff;
-    }
-
-    .profile-card {
-      text-align: center;
-    }
-
-    .profile-avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 4px;
-      object-fit: cover;
-      margin-bottom: 0.5rem;
-      border: 1px solid #b4c6eb;
-    }
-
-    .profile-name {
-      margin: 0;
-      font-size: 1.1rem;
-      color: #2b4c99;
-    }
-
-    .profile-tagline {
-      margin: 0.25rem 0 0.75rem;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .sidebar-menu {
-      text-align: left;
-      margin-top: 0.5rem;
-      border-top: 1px solid #edf1ff;
-      padding-top: 0.5rem;
-      font-size: 0.9rem;
-    }
-
-    .sidebar-menu a {
-      display: block;
-      padding: 2px 0;
-      text-decoration: none;
-    }
-
-    .sidebar-menu a::before {
-      content: "› ";
-      color: var(--text-muted);
-    }
-
-    .sidebar-menu a:hover {
-      text-decoration: underline;
-    }
-
-    .sidebar-meta {
-      margin-top: 0.5rem;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      text-align: left;
-    }
-
-    .sidebar-meta strong {
-      display: inline-block;
-      min-width: 70px;
-    }
-
-    .main-column {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .right-column {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .box-title {
-      margin: -0.25rem -1rem 0.5rem;
-      padding: 0.35rem 1rem;
-      font-size: 0.95rem;
-      text-transform: lowercase;
-      color: #2b4c99;
-      font-weight: 600;
-      background: linear-gradient(to bottom, #eef3ff, #dde7ff);
-      border-bottom: 1px solid #c5d4f1;
-    }
-
-    .info-table {
-      margin: 0;
-      border-radius: 3px;
+      height: 100vh;
+      width: 100vw;
       overflow: hidden;
+      background: #000; /* céu totalmente escuro */
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      color: #fff;
     }
 
-    .info-row {
-      display: grid;
-      grid-template-columns: 130px 1fr;
-      column-gap: 0.5rem;
-      padding: 4px 6px;
-      font-size: 0.83rem;
-      box-shadow: inset 0 1px 0 #ffffff;
-    }
-
-    .info-row:nth-child(odd) {
-      background: var(--row-alt); /* azul clarinho */
-    }
-
-    .info-row:nth-child(even) {
-      background: #ffffff; /* branco */
-    }
-
-    .info-label {
-      color: #2b4c99; /* azul mais escuro */
-      text-transform: lowercase;
-      font-weight: 600;
-    }
-
-    .info-value {
-      margin: 0;
-    }
-
-    .box-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: -0.25rem -1rem 0.5rem;
-      padding: 0.35rem 1rem;
-      background: linear-gradient(to bottom, #eef3ff, #dde7ff);
-      border-bottom: 1px solid #c5d4f1;
-    }
-
-    .box-header-title {
-      font-size: 0.95rem;
-      text-transform: lowercase;
-      color: #2b4c99;
-      font-weight: 600;
-    }
-
-    .box-header-count {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .mini-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.4rem;
-    }
-
-    .mini-card {
-      background: var(--badge-bg);
-      border-radius: 4px;
-      border: 1px solid var(--badge-border);
-      padding: 0.35rem 0.4rem;
-      font-size: 0.75rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .mini-card a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .mini-card-title {
-      font-weight: 600;
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
       display: block;
     }
 
-    .mini-card-sub {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .stack-icon {
-      width: 18px;
-      height: 18px;
-      vertical-align: middle;
-      margin-right: 4px;
-    }
-
-    .scraps-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      font-size: 0.85rem;
-    }
-
-    .scrap-item {
-      border-top: 1px solid #edf1ff;
-      padding-top: 0.5rem;
-      margin-top: 0.5rem;
-    }
-
-    .scrap-item:first-child {
-      border-top: none;
-      padding-top: 0;
-      margin-top: 0;
-    }
-
-    .scrap-meta {
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      margin-bottom: 0.15rem;
+      justify-content: center;
+      pointer-events: none;
+      padding: 1.5rem;
     }
 
-    .scrap-author {
-      font-weight: 600;
-      color: #2b4c99;
-    }
-
-    .scrap-date {
-      font-style: italic;
-    }
-
-    .scrap-text {
-      margin: 0.1rem 0 0.3rem;
-      white-space: pre-wrap;
-    }
-
-    .scrap-tag {
-      display: inline-block;
-      margin-top: 0.15rem;
-      padding: 1px 4px;
-      border-radius: 3px;
-      background: var(--badge-bg);
-      border: 1px solid var(--badge-border);
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .contact-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.35rem;
-      margin-top: 0.5rem;
-      font-size: 0.8rem;
-    }
-
-    .pill-link {
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: var(--badge-bg);
-      border: 1px solid var(--badge-border);
-      text-decoration: none;
-      color: var(--link);
-    }
-
-    .pill-link:hover {
-      background: #e4ebff;
-    }
-
-    .footer-note {
+    .text-block {
       text-align: center;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin: 0.5rem 0 1rem;
+      opacity: 0.5; /* texto bem suave */
+      animation: fadeIn 2s ease forwards 0.8s;
     }
 
-    @media (max-width: 900px) {
-      .orkut-page {
-        grid-template-columns: 1fr;
-        max-width: 100%;
-      }
+    .name {
+      font-size: clamp(2.8rem, 10vw, 4.4rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      color: rgba(255, 255, 255, 0.75);
+      font-weight: 300;
+    }
 
-      .right-column {
-        order: 3;
-      }
+    .message {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.55);
+      font-weight: 300;
+    }
 
-      .sidebar {
-        order: 1;
+    @media (max-width: 600px) {
+      .message {
+        font-size: 0.9rem;
       }
+    }
 
-      .main-column {
-        order: 2;
-      }
+    .line {
+      display: block;
+      opacity: 1;
+      min-height: 1.3em;
+    }
+
+    .line.strong {
+      margin-top: 0.4rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 0.5; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <div class="orkut-page">
-    <!-- COLUNA ESQUERDA -->
-    <aside class="sidebar">
-      <div class="profile-card">
-        <img
-          id="avatar"
-          class="profile-avatar"
-          src=""
-          alt="Foto de perfil"
-        />
-        <h1 class="profile-name" id="profile-name">Rocco</h1>
-        <p class="profile-tagline" id="profile-tagline">
-          desenvolvedor open-source
-        </p>
+  <canvas id="sky"></canvas>
 
-        <nav class="sidebar-menu">
-          <a href="#perfil">perfil</a>
-          <a href="#recados">recados (blog)</a>
-          <a href="#projetos">projetos</a>
-          <a href="#contato">contato</a>
-        </nav>
-
-        <div class="sidebar-meta">
-          <div><strong>github:</strong> <span id="github-handle">@ruidosujeira</span></div>
-          <div><strong>stack:</strong> ts, react, node, perf</div>
-          <div><strong>vibe:</strong> open-source, debug e código.</div>
-        </div>
+  <div class="overlay">
+    <div class="text-block">
+      <div class="name" id="name"></div>
+      <div class="message">
+        <span class="line" id="line1"></span>
+        <span class="line strong" id="line2"></span>
       </div>
-    </aside>
-
-    <!-- COLUNA DO MEIO -->
-    <main class="main-column">
-      <!-- PERFIL / SOCIAL -->
-      <section id="perfil" class="box">
-        <h2 class="box-title">social</h2>
-        <div class="info-table" id="info-table"></div>
-      </section>
-
-      <!-- RECADOS / BLOG -->
-      <section id="recados" class="box">
-        <h2 class="box-title">recados / dev-log</h2>
-        <ul class="scraps-list" id="scraps-list"></ul>
-      </section>
-    </main>
-
-    <!-- COLUNA DIREITA -->
-    <aside class="right-column">
-      <!-- PROJETOS (amigos) -->
-      <section id="projetos" class="box">
-        <div class="box-header">
-          <h2 class="box-header-title">projetos</h2>
-          <span class="box-header-count" id="projects-count"></span>
-        </div>
-        <div class="mini-grid" id="projects-grid"></div>
-      </section>
-
-      <!-- STACKS (comunidades) -->
-      <section class="box">
-        <div class="box-header">
-          <h2 class="box-header-title">stacks</h2>
-          <span class="box-header-count" id="stacks-count"></span>
-        </div>
-        <div class="mini-grid" id="stacks-grid"></div>
-      </section>
-
-      <!-- CONTATO -->
-      <section id="contato" class="box">
-        <h2 class="box-title">contato</h2>
-        <p style="font-size:0.8rem;margin:0 0 0.4rem;">
-          Quer trocar ideia, colaborar em projeto?
-        </p>
-        <div class="contact-links">
-          <a class="pill-link" id="github-link" href="#" target="_blank" rel="noreferrer"
-            >GitHub</a
-          >
-          <a
-            class="pill-link"
-            href="mailto:seu.email+rocco@exemplo.com"
-            target="_blank"
-            rel="noreferrer"
-            >Email</a
-          >
-          <a
-            class="pill-link"
-            href="https://instagram.com/ruidosujeira"
-            target="_blank"
-            rel="noreferrer"
-            >Instagram</a
-          >
-        </div>
-      </section>
-    </aside>
+    </div>
   </div>
 
-  <p class="footer-note">
-    Orkutfolio feito em HTML, CSS e JS puro. Sinta-se em 2007, mas com stack de hoje.
-  </p>
-
   <script>
-    // ================== CONFIG EDITÁVEL ==================
-    const GITHUB_USERNAME = "ruidosujeira";
-    const DISPLAY_NAME = "Rocco";
-    const TAGLINE =
-      "desenvolvedor open-source & criador do Perf Fiscal (eslint-plugin-perf-fiscal)";
+    /* ======================================
+       TEXTO CONFIGURÁVEL
+    ====================================== */
 
-    const socialInfo = [
-      { label: "ocupação", value: "dev open-source / creator" },
-      {
-        label: "interesses",
-        value:
-          "performance de front-end, análise estática, redes sociais transparentes, open-source",
-      },
-      {
-        label: "quem sou eu",
-        value:
-          "curioso demais, escrevo mais código do que posts, e vivo tentando medir coisas que ninguém mede.",
-      },
-      { label: "cidade", value: "Brasil" },
-      { label: "estilo", value: "caos organizado, dark mode e terminal aberto" },
-      { label: "linguagens", value: "TypeScript, JavaScript, um pouco de tudo" },
-      { label: "status", value: "sempre em beta, mas deployando assim mesmo" },
+    const NAME = "Antonia";
+    const MESSAGE = [
+      "Deixo aqui, de maneira pública, minha maior prova de amor.",
+      "Eu te amo."
     ];
 
-    const scraps = [
-      {
-        author: "Rocco",
-        date: "15/11/2025",
-        text:
-          "Brincando com o Perf Fiscal e evoluindo.",
-        tag: "perf-fiscal",
-      },
-      {
-        author: "Rocco",
-        date: "14/11/2025",
-        text:
-          "Esbocei a ideia de um portfólio estilo Orkut. Se você está lendo isso, significa que eu realmente fiz.",
-        tag: "meta",
-      },
-      {
-        author: "Rocco",
-        date: "13/11/2025",
-        text:
-          "Anotei uma lista de redes sociais que eu ainda quero clonar em versão open-source, mostrando o algoritmo por trás.",
-        tag: "ideias",
-      },
-    ];
+    const nameEl = document.getElementById("name");
+    const line1El = document.getElementById("line1");
+    const line2El = document.getElementById("line2");
 
-    const projects = [
-      {
-        name: "Perf Fiscal",
-        url: "https://github.com/ruidosujeira/perf-linter",
-        desc: "eslint plugin focado em performance real para React/TS, com análise cross-file.",
-      },
-      {
-        name: "Swap",
-        url: "https://github.com/ruidosujeira",
-        desc: "experimento de feed tipo Tinder para conteúdo, moldado por likes/dislikes.",
-      },
-      {
-        name: "Knob",
-        url: "https://github.com/ruidosujeira",
-        desc: "controle do algoritmo com sliders: feed ajustável pelo próprio usuário.",
-      },
-      {
-        name: "Labs & snippets",
-        url: "https://github.com/ruidosujeira?tab=repositories",
-        desc: "coleção de pequenos projetos, testes e ideias estranhas.",
-      },
-    ];
+    function typeText(el, text, speed, delay = 0, transformFn = (s) => s, cb) {
+      setTimeout(() => {
+        el.textContent = "";
+        const finalText = transformFn(text);
+        let i = 0;
+        const interval = setInterval(() => {
+          el.textContent += finalText[i];
+          i++;
+          if (i >= finalText.length) {
+            clearInterval(interval);
+            if (cb) cb();
+          }
+        }, speed);
+      }, delay);
+    }
 
-    const stacks = [
-      {
-        name: "TypeScript",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-      },
-      {
-        name: "React",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-      },
-      {
-        name: "Node.js",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
-      },
-      {
-        name: "PostgreSQL",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
-      },
-      {
-        name: "Docker",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
-      },
-      {
-        name: "GitHub Actions",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
-      },
-    ];
-
-    // ================== RENDERIZAÇÃO ==================
-    document.getElementById(
-      "avatar"
-    ).src = `https://github.com/${GITHUB_USERNAME}.png`;
-    document.getElementById("profile-name").textContent = DISPLAY_NAME;
-    document.getElementById("profile-tagline").textContent = TAGLINE;
-    document.getElementById(
-      "github-handle"
-    ).textContent = `@${GITHUB_USERNAME}`;
-    document
-      .getElementById("github-link")
-      .setAttribute("href", `https://github.com/${GITHUB_USERNAME}`);
-
-    const infoTableEl = document.getElementById("info-table");
-    socialInfo.forEach((item) => {
-      const row = document.createElement("div");
-      row.className = "info-row";
-
-      const label = document.createElement("div");
-      label.className = "info-label";
-      label.textContent = item.label;
-
-      const value = document.createElement("div");
-      value.className = "info-value";
-      value.textContent = item.value;
-
-      row.appendChild(label);
-      row.appendChild(value);
-      infoTableEl.appendChild(row);
+    // ordem de digitação
+    typeText(nameEl, NAME, 90, 800, s => s.toUpperCase(), () => {
+      typeText(line1El, MESSAGE[0], 35, 400, s => s, () => {
+        typeText(line2El, MESSAGE[1], 70, 350, s => s.toUpperCase());
+      });
     });
 
-    const scrapsListEl = document.getElementById("scraps-list");
-    scraps.forEach((scrap) => {
-      const li = document.createElement("li");
-      li.className = "scrap-item";
+    /* ======================================
+       CÉU ESTRELADO
+    ====================================== */
 
-      const meta = document.createElement("div");
-      meta.className = "scrap-meta";
+    const canvas = document.getElementById("sky");
+    const ctx = canvas.getContext("2d");
 
-      const author = document.createElement("span");
-      author.className = "scrap-author";
-      author.textContent = scrap.author;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
 
-      const date = document.createElement("span");
-      date.className = "scrap-date";
-      date.textContent = scrap.date;
+    let IS_MOBILE =
+      /Mobi|Android/i.test(navigator.userAgent) || width < 768;
 
-      meta.appendChild(author);
-      meta.appendChild(date);
+    let STAR_COUNT = 0;
+    const stars = [];
 
-      const text = document.createElement("p");
-      text.className = "scrap-text";
-      text.textContent = scrap.text;
+    function recalcStarCount() {
+      // mais denso pra parecer foto de céu
+      const baseDensity = IS_MOBILE ? 4500 : 3200;
+      const maxStars = IS_MOBILE ? 550 : 1100;
+      STAR_COUNT = Math.min(maxStars, Math.floor((width * height) / baseDensity));
+    }
 
-      li.appendChild(meta);
-      li.appendChild(text);
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
 
-      if (scrap.tag) {
-        const tag = document.createElement("span");
-        tag.className = "scrap-tag";
-        tag.textContent = scrap.tag;
-        li.appendChild(tag);
+    function createStar() {
+      const depth = Math.random();
+      const isBright = Math.random() < 0.06; // ~6% mais brilhantes
+      return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: isBright
+          ? random(1.4, 2.6) * (0.6 + depth)
+          : random(0.3, 1.4) * (0.4 + depth),
+        baseAlpha: isBright
+          ? random(0.5, 0.9)
+          : random(0.15, 0.45),
+        twinkleSpeed: random(0.003, 0.018),
+        twinkleOffset: Math.random() * Math.PI * 2,
+        driftX: random(-0.012, 0.012),
+        driftY: random(-0.01, 0.02),
+        depth,
+        isBright
+      };
+    }
+
+    function initStars() {
+      stars.length = 0;
+      recalcStarCount();
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push(createStar());
+      }
+    }
+
+    /* ======================================
+       ANIMAÇÃO
+    ====================================== */
+
+    let lastTime = 0;
+
+    function draw(time) {
+      const delta = time - lastTime;
+      lastTime = time;
+
+      ctx.clearRect(0, 0, width, height);
+
+      for (const star of stars) {
+        star.x += star.driftX * delta * 0.05;
+        star.y += star.driftY * delta * 0.05;
+
+        if (star.x < -5) star.x = width + 5;
+        if (star.x > width + 5) star.x = -5;
+        if (star.y > height + 5) star.y = -5;
+
+        const twinkle =
+          star.baseAlpha +
+          Math.sin(time * star.twinkleSpeed + star.twinkleOffset) *
+            (star.isBright ? 0.25 : 0.22);
+
+        const alpha = Math.max(0, Math.min(1, twinkle));
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+
+        // mesma coloração que você gostou: verde mais escuro
+        const g = 70 + Math.floor(star.depth * 40);  // 70–110
+        const b = 40 + Math.floor(star.depth * 30);  // 40–70
+
+        ctx.fillStyle = `rgba(0, ${g}, ${b}, ${alpha})`;
+        ctx.shadowBlur = star.isBright ? 10 : 6;
+        ctx.shadowColor = `rgba(0, ${g + 25}, ${b + 12}, ${alpha * (star.isBright ? 1 : 0.8)})`;
+        ctx.fill();
       }
 
-      scrapsListEl.appendChild(li);
-    });
+      ctx.shadowBlur = 0;
 
-    const projectsGridEl = document.getElementById("projects-grid");
-    document.getElementById(
-      "projects-count"
-    ).textContent = `${projects.length} projetos`;
-    projects.forEach((proj) => {
-      const card = document.createElement("div");
-      card.className = "mini-card";
+      requestAnimationFrame(draw);
+    }
 
-      const link = document.createElement("a");
-      link.href = proj.url;
-      link.target = "_blank";
-      link.rel = "noreferrer";
+    initStars();
+    requestAnimationFrame(draw);
 
-      const title = document.createElement("span");
-      title.className = "mini-card-title";
-      title.textContent = proj.name;
-
-      const sub = document.createElement("span");
-      sub.className = "mini-card-sub";
-      sub.textContent = proj.desc;
-
-      link.appendChild(title);
-      link.appendChild(sub);
-      card.appendChild(link);
-      projectsGridEl.appendChild(card);
-    });
-
-    const stacksGridEl = document.getElementById("stacks-grid");
-    document.getElementById(
-      "stacks-count"
-    ).textContent = `${stacks.length} stacks`;
-    stacks.forEach((stack) => {
-      const card = document.createElement("div");
-      card.className = "mini-card";
-
-      const span = document.createElement("span");
-
-      if (stack.icon) {
-        const img = document.createElement("img");
-        img.src = stack.icon;
-        img.alt = stack.name;
-        img.className = "stack-icon";
-        span.appendChild(img);
-      }
-
-      const text = document.createElement("span");
-      text.textContent = stack.name;
-
-      span.appendChild(text);
-      card.appendChild(span);
-      stacksGridEl.appendChild(card);
+    window.addEventListener("resize", () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      IS_MOBILE = /Mobi|Android/i.test(navigator.userAgent) || width < 768;
+      initStars();
     });
   </script>
 </body>
