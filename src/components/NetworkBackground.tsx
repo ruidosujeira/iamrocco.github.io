@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface Node {
   id: number;
@@ -45,12 +45,12 @@ export function NetworkBackground() {
             <stop offset="50%" stopColor="rgb(120, 120, 140)" stopOpacity="0.6" />
             <stop offset="100%" stopColor="rgb(100, 100, 120)" stopOpacity="0" />
           </linearGradient>
-          
+
           <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
             <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
         </defs>
@@ -71,7 +71,7 @@ export function NetworkBackground() {
               stroke="url(#lineGradient)"
               strokeWidth="1"
               initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ 
+              animate={{
                 pathLength: [0, 1, 1, 0],
                 opacity: [0, 0.6, 0.6, 0]
               }}
@@ -80,7 +80,7 @@ export function NetworkBackground() {
                 delay: index * 0.5,
                 repeat: Infinity,
                 repeatDelay: 2,
-                ease: "easeInOut"
+                ease: "easeInOut" as const
               }}
             />
           );
@@ -97,7 +97,7 @@ export function NetworkBackground() {
               fill="rgb(120, 120, 140)"
               filter="url(#glow)"
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ 
+              animate={{
                 scale: [0, 1, 1.2, 1],
                 opacity: [0, 0.8, 0.8, 0.8]
               }}
@@ -109,7 +109,7 @@ export function NetworkBackground() {
                 repeatDelay: 4
               }}
             />
-            
+
             {/* Pulse effect */}
             <motion.circle
               cx={`${node.x}%`}
@@ -119,7 +119,7 @@ export function NetworkBackground() {
               stroke="rgb(140, 140, 160)"
               strokeWidth="1"
               initial={{ scale: 1, opacity: 0.6 }}
-              animate={{ 
+              animate={{
                 scale: [1, 2.5, 2.5],
                 opacity: [0.6, 0, 0]
               }}
@@ -135,7 +135,7 @@ export function NetworkBackground() {
       </svg>
 
       {/* Node labels */}
-      {nodes.map((node) => 
+      {nodes.map((node) =>
         node.label ? (
           <motion.div
             key={`label-${node.id}`}

@@ -16,10 +16,10 @@ export function SketchElement({ type, className = "", delay = 0 }: SketchElement
 
   const variants = {
     hidden: { opacity: 0, pathLength: 0 },
-    visible: { 
-      opacity: 0.15, 
+    visible: {
+      opacity: 0.15,
       pathLength: 1,
-      transition: { duration: 1.5, ease: "easeInOut" }
+      transition: { duration: 1.5, ease: "easeInOut" as const }
     }
   };
 
