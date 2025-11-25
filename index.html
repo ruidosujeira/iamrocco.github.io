@@ -1,13 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ruidosujeira | Tooling Engineer</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="ruidosujeira - Tooling Engineer. Specializing in Rust, Zig, and TypeScript. Building the next generation of developer tools.">
+    <meta name="theme-color" content="#050505">
+    <title>ruidosujeira</title>
+
+    <!-- Preload critical assets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <main>
+        <header class="hero">
+            <div class="glitch-wrapper">
+                <h1 class="glitch" data-text="ruidosujeira">ruidosujeira</h1>
+            </div>
+            <p class="subtitle">Tooling Engineer</p>
+        </header>
+
+        <section class="stack">
+            <div class="stack-item">
+                <span class="lang">Rust</span>
+                <div class="bar" style="--progress: 100%; --color: #ff3e00;"></div>
+            </div>
+            <div class="stack-item">
+                <span class="lang">Zig</span>
+                <div class="bar" style="--progress: 90%; --color: #f7a41d;"></div>
+            </div>
+            <div class="stack-item">
+                <span class="lang">TypeScript</span>
+                <div class="bar" style="--progress: 95%; --color: #3178c6;"></div>
+            </div>
+        </section>
+
+        <footer class="contact">
+            <div class="links">
+                <a href="https://github.com/ruidosujeira" target="_blank" rel="noopener noreferrer" class="link">
+                    <span class="link-text">github</span>
+                    <span class="link-arrow">↗</span>
+                </a>
+            </div>
+            <div class="cmd-hint">
+                <span class="cmd-key">⌘</span> <span class="cmd-key">K</span>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Command Palette -->
+    <div id="cmd-palette" class="cmd-overlay" aria-hidden="true">
+        <div class="cmd-modal">
+            <div class="cmd-header">
+                <input type="text" id="cmd-input" placeholder="Type a command..." autocomplete="off">
+                <span class="cmd-esc">ESC</span>
+            </div>
+            <ul id="cmd-list"></ul>
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+
 </html>
